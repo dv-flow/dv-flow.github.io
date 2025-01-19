@@ -1,0 +1,21 @@
+
+package:
+  name: dv-flow.github.io
+
+  dep-sets:
+  - name: default-dev
+    deps:
+    - name: Sphinx
+      src: pypi
+    - name: sphinx-jsonschema
+      src: pypi
+    - name: sphinxcontrib-mermaid
+      src: pypi
+
+  - name: default
+    deps:
+    - name: pytest
+      src: pypi
+    - name: svdep
+      url: https://github.com/fvutils/svdep.git
+

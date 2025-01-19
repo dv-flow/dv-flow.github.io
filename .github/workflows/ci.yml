@@ -1,0 +1,32 @@
+name: CI
+on:
+  - push
+  - pull_request
+  - workflow_dispatch
+
+jobs:
+  ci-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Configure Python
+      run: |
+        # Install dependencies required to load ivpm.yaml file
+        python3 -m venv packages/python
+        ./packages/python/bin/python -m pip install ivpm --upgrade
+        ./packages/python/bin/python3 -m ivpm update -a
+    - name: Build Docs
+      run: |
+        cd docs
+        make html
+        cp ../schema/flow.dv.schema.json _build/html/
+        touch _build/html/.nojekyll
+
+    - name: Publish Docs
+      if: ${{ startsWith(github.ref, 'refs/heads/main') }}
+      uses: JamesIves/github-pages-deploy-action@4.1.7
+      with:
+        branch: gh-pages
+        folder: docs/_build/html
+
+
