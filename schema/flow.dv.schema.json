@@ -26,7 +26,14 @@
                 "imports": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/defs/import-def"
+                        "anyOf": [
+                            {
+                                "$ref": "#/defs/import-def"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
                     }
                 },
                 "with": {
@@ -88,7 +95,14 @@
                 "imports": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "anyOf": [
+                            {
+                                "$ref": "#/defs/import-def"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
                     }
                 },
                 "tasks": {
