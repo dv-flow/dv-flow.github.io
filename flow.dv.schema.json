@@ -32,7 +32,14 @@
                 "with": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/defs/param"
+                        "anyOf": [
+                            {
+                                "$ref": "#/defs/param"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
                     }
                 },
                 "tasks": {
@@ -141,12 +148,7 @@
                 "type": {
                     "type": "string"
                 },
-                "with": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/defs/param"
-                    }
-                },
+                "with": { },
                 "oneOf": [
                     {
                         "needs": {
