@@ -47,8 +47,8 @@ possible to a change of tool. It's also likely that we will either want to add n
 to our environment over time, or adapt our environment to take advantage of new 
 productivity-enhancing tool features.
 
-DV Flow Manager is designed to be the 'make' for silicon engineering. There are three
-aspects to the tool:
+DV Flow provides build-flow management features focused on silicon engineering. 
+There are three aspects to the project:
 
 * **Flow Specification** - Processing steps for a given project are captured in a hierarchy
   of YAML files. The flow-specification schema is designed to be tool-independent, such 
@@ -64,8 +64,9 @@ aspects to the tool:
 Key Concepts
 ============
 
-DV Flow Manager has three key concepts:
-* **Package** - A packages is parameterizd namespace that contain tasks. 
+DV Flow input specification builds on three key concepts:
+
+* **Package** - A packages is a parameterizd namespace that defines tasks and types.
 * **Task** - A task is a processing step in a flow. Tasks represent a data-processing step, which
   might be as simple as building a list of files, or might be a complex as creating a hardened macro
   from multiple source collections. 
@@ -79,11 +80,6 @@ Let's look at an example to better-understand these concepts.
 
     package:
       name: my_ip
-
-      imports:
-      - name: hdl.sim.vlt
-        as: hdl.sim
-
       tasks:
         - name: rtl
           uses: std.Fileset
@@ -99,17 +95,17 @@ Let's look at an example to better-understand these concepts.
             include: "*.sv"
 
         - name: sim
-          uses: hdl.sim.SimImage
+          uses: hdlsim.vlt.SimImage
           needs: [rtl, tb]
 
         -name: test1
-          uses: hdl.sim.RunSim
+          uses: hdlsim.vlt.RunSim
           needs: [sim]
 
 The code above specifies two collections of source code --
 one for the design and one for the testbench. This source
 code is compiled into as simulation image using the 
-pre-defined task named `hdl.sim.SimImage`. After,
+pre-defined task named `hdlsim.vlt.SimImage`. After,
 we execute the simulation image.
 
 
@@ -131,13 +127,13 @@ by passing arguments to the simulation.
 
     # ...
         -name: test1
-          uses: hdl.sim.RunSim
+          uses: hdlsim.vlt.RunSim
           needs: [sim]
         -name: test2
-          uses: hdl.sim.RunSim
+          uses: hdlsim.vlt.RunSim
           needs: [sim]
         -name: test3
-          uses: hdl.sim.RunSim
+          uses: hdlsim.vlt.RunSim
           needs: [sim]
 
 .. mermaid::
@@ -153,7 +149,8 @@ Our task graph now looks like the above. Our build tasks are sequential,
 while our test tasks only depend on the simulation image being
 up-to-date, and and can execute concurrently.
 
-## Dataflow
+Dataflow
+--------
 
 What ties all the tasks above together is dependency-based dataflow.
 
@@ -167,7 +164,7 @@ What ties all the tasks above together is dependency-based dataflow.
             include: "*.sv"
 
         - name: sim
-          uses: hdl.sim.SimImage
+          uses: hdlsim.vlt.SimImage
           needs: [rtl, tb]
 
 When the `sim` task places dependencies on the `rtl` and `tb`
@@ -177,7 +174,6 @@ task has a list of all of the source files that it needs to
 compile. The `sim` task also produces an output, which contains 
 a reference to the directory where the simulation image resides.
 The `test` tasks use this input to locate the simulation image.
-
 
 
 
