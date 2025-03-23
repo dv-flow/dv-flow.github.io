@@ -11,6 +11,8 @@ package:
       src: pypi
     - name: sphinxcontrib-mermaid
       src: pypi
+    - name: dv-flow-mgr
+      url: https://github.com/dv-flow/dv-flow-mgr.git
 
   - name: default
     deps:

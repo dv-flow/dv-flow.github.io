@@ -24,9 +24,10 @@ enables concurrent execution and efficient avoidance of redundant work.
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    quickstart
    intro
+   userguide/index
    reference
