@@ -40,6 +40,34 @@
 Each package is defined by the content in its root <cite>flow.yaml</cite> file
 and that in any <cite>fragment</cite> files that are specified in the root
 package file or its fragments.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">package</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">proj1</span>
+
+<span class="w">    </span><span class="c1"># ...</span>
+
+<span class="w">    </span><span class="nt">fragments</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src/rtl/flow.yaml</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src/verif</span>
+</pre></div>
+</div>
+<p>Each package fragment element specifies either a directory or a file.
+If a file is specified, then that file is loaded. It is expected that the
+content will be a DV-Flow package fragment. If a directory is specified,
+then a top-down search is performed for <cite>flow.dv</cite> files in the subdirectory
+tree.</p>
+<p>The structure of a package fragment file is nearly identical to a package
+definition. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">fragment</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rtl</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">std.FileSet</span>
+<span class="w">      </span><span class="nt">params</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">include</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*.sv&quot;</span>
+</pre></div>
+</div>
+<p>Remember that all fragments referenced by a given package contribute to
+the same package namespace. It would be illegal for another flow file
+to also define a task named <cite>rtl</cite>.</p>
 <section id="packagedef">
 <span id="packagedef"></span><h3>PackageDef<a class="headerlink" href="#packagedef" title="Link to this heading">¶</a></h3>
 <table class="docutils align-default">
@@ -162,16 +190,9 @@ package file or its fragments.</p>
 </tbody>
 </table>
 </section>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">package</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">proj1</span>
-
-<span class="w">    </span><span class="c1"># ...</span>
-
-<span class="w">    </span><span class="nt">fragments</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src/rtl/flow.yaml</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src/verif</span>
-</pre></div>
-</div>
+</section>
+<section id="task-definition">
+<h2>Task Definition<a class="headerlink" href="#task-definition" title="Link to this heading">¶</a></h2>
 <section id="rundire">
 <span id="rundire"></span><h3>RundirE<a class="headerlink" href="#rundire" title="Link to this heading">¶</a></h3>
 <table class="docutils align-default">
@@ -749,20 +770,6 @@ package file or its fragments.</p>
 </tbody>
 </table>
 </section>
-<p>A fragment has similar content to a root-package file.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">fragment</span><span class="p">:</span>
-
-<span class="w">    </span><span class="nt">tasks</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rtl</span>
-<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">std.FileSet</span>
-<span class="w">      </span><span class="nt">params</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">include</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*.sv&quot;</span>
-</pre></div>
-</div>
-<p>Remember that all fragments referenced by a given package contribute to
-the same package namespace. It would be illegal for another flow file
-to also define a task named <cite>rtl</cite>.</p>
-<p>And, now, after</p>
 </section>
 </section>
 
@@ -800,6 +807,9 @@ to also define a task named <cite>rtl</cite>.</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Flow-Spec Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#file-root-elements">File Root Elements</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#packagedef">PackageDef</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#task-definition">Task Definition</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#rundire">RundirE</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#packagespec">PackageSpec</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#taskdef">TaskDef</a></li>
