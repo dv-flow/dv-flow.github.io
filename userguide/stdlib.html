@@ -15,7 +15,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Flow-Spec Reference" href="../reference.html" />
-    <link rel="prev" title="Tasks" href="tasks.html" />
+    <link rel="prev" title="Variables" href="variables.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -51,6 +51,17 @@
 </div>
 <p>The example above runs the Unix <cite>ls</cite> command and saves the
 output to a text file.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><cite>command</cite> – The command to run. The command may be a single line or
+multiple lines. The command is executed in a shell, so shell features
+such as pipes and redirection are available.</p></li>
+</ul>
+</section>
+<section id="input-output">
+<h3>Input/Output<a class="headerlink" href="#input-output" title="Link to this heading">¶</a></h3>
+</section>
 </section>
 <section id="std-fileset">
 <h2>std.FileSet<a class="headerlink" href="#std-fileset" title="Link to this heading">¶</a></h2>
@@ -72,6 +83,15 @@ tools.</p>
 <p>The example above finds all files with a <cite>.v</cite> extension in the <cite>src/rtl</cite>
 subdirectory of the task’s source directory. The task emits a FileSet
 parameter set having the filetype of <cite>verilogSource</cite>.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+</section>
+<section id="id2">
+<h3>Input/Output<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p>A FileSet task propagates all of its inputs (eg passthrough=all). It
+produces an additional data item of type <cite>std.FileSet</cite> with the
+specified file type, base directory, and file list.</p>
+</section>
 </section>
 </section>
 
@@ -109,6 +129,7 @@ parameter set having the filetype of <cite>verilogSource</cite>.</p>
 <li class="toctree-l2"><a class="reference internal" href="fundamentals.html">DV-Flow Fundamentals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="packages.html">Packages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tasks.html">Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="variables.html">Variables</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Standard Library</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#std-exec">std.Exec</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#std-fileset">std.FileSet</a></li>
@@ -124,7 +145,7 @@ parameter set having the filetype of <cite>verilogSource</cite>.</p>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="index.html">User Guide</a><ul>
-      <li>Previous: <a href="tasks.html" title="previous chapter">Tasks</a></li>
+      <li>Previous: <a href="variables.html" title="previous chapter">Variables</a></li>
       <li>Next: <a href="../reference.html" title="next chapter">Flow-Spec Reference</a></li>
   </ul></li>
   </ul></li>

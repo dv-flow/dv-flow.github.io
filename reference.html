@@ -224,7 +224,7 @@ to also define a task named <cite>rtl</cite>.</p>
 <tr class="row-even"><td><p>type</p></td>
 <td><p><em>string</em></p></td>
 </tr>
-<tr class="row-odd"><td rowspan="2"><ul class="simple">
+<tr class="row-odd"><td rowspan="3"><ul class="simple">
 <li><p>params</p></li>
 </ul>
 </td>
@@ -233,16 +233,19 @@ to also define a task named <cite>rtl</cite>.</p>
 <tr class="row-even"><td><p>type</p></td>
 <td><p><em>object</em></p></td>
 </tr>
-<tr class="row-odd"><td rowspan="3"><ul class="simple">
+<tr class="row-odd"><td><p>additionalProperties</p></td>
+<td><p>True</p></td>
+</tr>
+<tr class="row-even"><td rowspan="3"><ul class="simple">
 <li><p>_fullname</p></li>
 </ul>
 </td>
 <td colspan="2"><p><em>Fullname</em></p></td>
 </tr>
-<tr class="row-even"><td><p>type</p></td>
+<tr class="row-odd"><td><p>type</p></td>
 <td><p><em>string</em></p></td>
 </tr>
-<tr class="row-odd"><td><p>default</p></td>
+<tr class="row-even"><td><p>default</p></td>
 <td><p>null</p></td>
 </tr>
 </tbody>
@@ -410,7 +413,7 @@ to also define a task named <cite>rtl</cite>.</p>
 </tr>
 <tr class="row-odd"><td colspan="4"><p><a class="reference internal" href="#rundire"><span class="std std-ref">RundirE</span></a></p></td>
 </tr>
-<tr class="row-even"><td rowspan="4"><ul class="simple">
+<tr class="row-even"><td rowspan="7"><ul class="simple">
 <li><p>passthrough</p></li>
 </ul>
 </td>
@@ -418,24 +421,41 @@ to also define a task named <cite>rtl</cite>.</p>
 </tr>
 <tr class="row-odd"><td colspan="4"><p>Specifies whether this task should pass its inputs to its output</p></td>
 </tr>
+<tr class="row-even"><td><p>default</p></td>
+<td colspan="3"><p>null</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><p>anyOf</p></td>
+<td colspan="3"><p><span class="xref std std-ref">#/defs/PassthroughE</span></p></td>
+</tr>
 <tr class="row-even"><td><p>type</p></td>
-<td colspan="3"><p><em>boolean</em></p></td>
+<td colspan="2"><p><em>array</em></p></td>
 </tr>
-<tr class="row-odd"><td><p>default</p></td>
-<td colspan="3"><p>False</p></td>
+<tr class="row-odd"><td colspan="3"><p>items</p></td>
 </tr>
-<tr class="row-even"><td rowspan="4"><ul class="simple">
+<tr class="row-even"><td><p>type</p></td>
+<td colspan="2"><p><em>null</em></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="7"><ul class="simple">
 <li><p>consumes</p></li>
 </ul>
 </td>
 <td colspan="4"><p><em>Consumes</em></p></td>
 </tr>
-<tr class="row-odd"><td colspan="4"><p>Specifies matching patterns for parameter sets that this task consumes</p></td>
+<tr class="row-even"><td colspan="4"><p>Specifies matching patterns for parameter sets that this task consumes</p></td>
 </tr>
-<tr class="row-even"><td><p>type</p></td>
-<td colspan="3"><p><em>array</em></p></td>
+<tr class="row-odd"><td><p>default</p></td>
+<td colspan="3"><p>null</p></td>
 </tr>
-<tr class="row-odd"><td colspan="4"><p>items</p></td>
+<tr class="row-even"><td rowspan="4"><p>anyOf</p></td>
+<td colspan="3"><p><span class="xref std std-ref">#/defs/ConsumesE</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="2"><p><em>array</em></p></td>
+</tr>
+<tr class="row-even"><td colspan="3"><p>items</p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="2"><p><em>null</em></p></td>
 </tr>
 </tbody>
 </table>
@@ -538,26 +558,49 @@ to also define a task named <cite>rtl</cite>.</p>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p>type</p></td>
-<td colspan="3"><p><em>object</em></p></td>
+<td colspan="4"><p><em>object</em></p></td>
 </tr>
-<tr class="row-even"><td colspan="4"><p>properties</p></td>
+<tr class="row-even"><td colspan="5"><p>properties</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="5"><ul class="simple">
+<tr class="row-odd"><td rowspan="4"><ul class="simple">
+<li><p>chain</p></li>
+</ul>
+</td>
+<td colspan="4"><p><em>Chain</em></p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
+<td colspan="3"><p>null</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p>anyOf</p></td>
+<td><p>type</p></td>
+<td colspan="2"><p><em>boolean</em></p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td colspan="2"><p><em>null</em></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="7"><ul class="simple">
 <li><p>matrix</p></li>
 </ul>
 </td>
-<td colspan="3"><p><em>Matrix</em></p></td>
+<td colspan="4"><p><em>Matrix</em></p></td>
 </tr>
-<tr class="row-even"><td colspan="3"><p>Matrix of parameter values to explore</p></td>
+<tr class="row-even"><td colspan="4"><p>Matrix of parameter values to explore</p></td>
 </tr>
-<tr class="row-odd"><td><p>type</p></td>
+<tr class="row-odd"><td><p>default</p></td>
+<td colspan="3"><p>null</p></td>
+</tr>
+<tr class="row-even"><td rowspan="4"><p>anyOf</p></td>
+<td><p>type</p></td>
 <td colspan="2"><p><em>object</em></p></td>
 </tr>
-<tr class="row-even"><td rowspan="2"><p>additionalProperties</p></td>
+<tr class="row-odd"><td rowspan="2"><p>additionalProperties</p></td>
 <td><p>type</p></td>
 <td><p><em>array</em></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p>items</p></td>
+<tr class="row-even"><td colspan="2"><p>items</p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="2"><p><em>null</em></p></td>
 </tr>
 </tbody>
 </table>

@@ -8,4 +8,5 @@ User Guide
    fundamentals
    packages
    tasks
+   variables
    stdlib

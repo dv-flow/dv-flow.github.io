@@ -8,6 +8,11 @@ Tasks
 Tasks are the fundamental unit of behavior in a DV-Flow specification. Tasks 
 typically reuse an existing task -- either in whole or in part. 
 
+.. image:: imgs/task_diagram.excalidraw.svg 
+    :width: 50%
+    :align: center
+    :alt: Task Diagram
+
 There are three key concepts of tasks to understand:
 
 * **Task Inputs/Dependencies** - A task may express dependencies on other
