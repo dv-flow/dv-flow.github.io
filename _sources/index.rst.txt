@@ -3,12 +3,13 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-DV Flow Manager
-===============
+DV Flow
+=======
 
-DV Flow Manager provides a "make for silicon engineering": a specification
+DV Flow provides a "make for silicon engineering": a specification
 for capturing design and verification (DV) tasks and dataflow in a way that
-enables concurrent execution and efficient avoidance of redundant work.
+enables concurrent execution and efficient avoidance of redundant work, and
+tools for working with that specification.
 
 .. mermaid::
 
