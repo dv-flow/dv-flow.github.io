@@ -104,7 +104,7 @@ scheduling and dataflow requirements are captured using `needs` relationships.
 
 
 Using Compound Tasks
---------------------
+====================
 
 Compound tasks allow a task to be defined in terms of a set 
 of subtasks. In many cases, this allows more-advanced behavior
