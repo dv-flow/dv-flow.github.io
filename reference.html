@@ -187,6 +187,29 @@ to also define a task named <cite>rtl</cite>.</p>
 <tr class="row-even"><td><p>default</p></td>
 <td colspan="3"><p>null</p></td>
 </tr>
+<tr class="row-odd"><td rowspan="4"><ul class="simple">
+<li><p>configs</p></li>
+</ul>
+</td>
+<td colspan="4"><p><em>Configs</em></p></td>
+</tr>
+<tr class="row-even"><td colspan="4"><p>List of package configurations</p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="3"><p><em>array</em></p></td>
+</tr>
+<tr class="row-even"><td><p>items</p></td>
+<td colspan="3"><p><span class="xref std std-ref">#/defs/ConfigDef</span></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><ul class="simple">
+<li><p>srcinfo</p></li>
+</ul>
+</td>
+<td><p>default</p></td>
+<td colspan="3"><p>null</p></td>
+</tr>
+<tr class="row-even"><td colspan="4"><p><span class="xref std std-ref">#/defs/SrcInfo</span></p></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -262,28 +285,41 @@ to also define a task named <cite>rtl</cite>.</p>
 </tr>
 <tr class="row-odd"><td colspan="5"><p>properties</p></td>
 </tr>
-<tr class="row-even"><td rowspan="3"><ul class="simple">
-<li><p><strong>name</strong></p></li>
+<tr class="row-even"><td rowspan="5"><ul class="simple">
+<li><p>name</p></li>
 </ul>
 </td>
 <td colspan="4"><p><em>Task Name</em></p></td>
 </tr>
 <tr class="row-odd"><td colspan="4"><p>The name of the task</p></td>
 </tr>
-<tr class="row-even"><td><p>type</p></td>
-<td colspan="3"><p><em>string</em></p></td>
+<tr class="row-even"><td><p>default</p></td>
+<td colspan="3"><p>null</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="3"><ul class="simple">
-<li><p>fullname</p></li>
+<tr class="row-odd"><td rowspan="2"><p>anyOf</p></td>
+<td><p>type</p></td>
+<td colspan="2"><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td colspan="2"><p><em>null</em></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="5"><ul class="simple">
+<li><p>override</p></li>
 </ul>
 </td>
-<td colspan="4"><p><em>Fullname</em></p></td>
+<td colspan="4"><p><em>Overide Name</em></p></td>
 </tr>
-<tr class="row-even"><td><p>type</p></td>
-<td colspan="3"><p><em>string</em></p></td>
+<tr class="row-even"><td colspan="4"><p>The name of the task to override</p></td>
 </tr>
 <tr class="row-odd"><td><p>default</p></td>
 <td colspan="3"><p>null</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p>anyOf</p></td>
+<td><p>type</p></td>
+<td colspan="2"><p><em>string</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="2"><p><em>null</em></p></td>
 </tr>
 <tr class="row-even"><td rowspan="4"><ul class="simple">
 <li><p>uses</p></li>
@@ -300,18 +336,60 @@ to also define a task named <cite>rtl</cite>.</p>
 <td colspan="3"><p>null</p></td>
 </tr>
 <tr class="row-even"><td rowspan="4"><ul class="simple">
+<li><p>body</p></li>
+</ul>
+</td>
+<td colspan="4"><p><em>Body</em></p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>Sub-tasks</p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td colspan="3"><p><em>array</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>items</p></td>
+<td colspan="3"><p><a class="reference internal" href="#taskdef"><span class="std std-ref">TaskDef</span></a></p></td>
+</tr>
+<tr class="row-even"><td rowspan="4"><ul class="simple">
 <li><p>pytask</p></li>
 </ul>
 </td>
-<td colspan="4"><p><em>Python method name</em></p></td>
+<td colspan="4"><p><em>Pytask</em></p></td>
 </tr>
-<tr class="row-odd"><td colspan="4"><p>Python method to execute to implement this task</p></td>
+<tr class="row-odd"><td colspan="4"><p>Python-based implementation (deprecated)</p></td>
 </tr>
 <tr class="row-even"><td><p>type</p></td>
 <td colspan="3"><p><em>string</em></p></td>
 </tr>
 <tr class="row-odd"><td><p>default</p></td>
 <td colspan="3"><p>null</p></td>
+</tr>
+<tr class="row-even"><td rowspan="4"><ul class="simple">
+<li><p>run</p></li>
+</ul>
+</td>
+<td colspan="4"><p><em>Run</em></p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>Shell-based implementation</p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td colspan="3"><p><em>string</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>default</p></td>
+<td colspan="3"><p>null</p></td>
+</tr>
+<tr class="row-even"><td rowspan="4"><ul class="simple">
+<li><p>shell</p></li>
+</ul>
+</td>
+<td colspan="4"><p><em>Shell</em></p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>Shell to use for shell-based implementation</p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td colspan="3"><p><em>string</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>default</p></td>
+<td colspan="3"><p>bash</p></td>
 </tr>
 <tr class="row-even"><td rowspan="2"><ul class="simple">
 <li><p>strategy</p></li>
@@ -321,20 +399,6 @@ to also define a task named <cite>rtl</cite>.</p>
 <td colspan="3"><p>null</p></td>
 </tr>
 <tr class="row-odd"><td colspan="4"><p><a class="reference internal" href="#strategydef"><span class="std std-ref">StrategyDef</span></a></p></td>
-</tr>
-<tr class="row-even"><td rowspan="4"><ul class="simple">
-<li><p>tasks</p></li>
-</ul>
-</td>
-<td colspan="4"><p><em>Tasks</em></p></td>
-</tr>
-<tr class="row-odd"><td colspan="4"><p>Sub-tasks</p></td>
-</tr>
-<tr class="row-even"><td><p>type</p></td>
-<td colspan="3"><p><em>array</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>items</p></td>
-<td colspan="3"><p><a class="reference internal" href="#taskdef"><span class="std std-ref">TaskDef</span></a></p></td>
 </tr>
 <tr class="row-even"><td rowspan="4"><ul class="simple">
 <li><p>desc</p></li>
@@ -456,6 +520,15 @@ to also define a task named <cite>rtl</cite>.</p>
 </tr>
 <tr class="row-odd"><td><p>type</p></td>
 <td colspan="2"><p><em>null</em></p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><ul class="simple">
+<li><p>srcinfo</p></li>
+</ul>
+</td>
+<td><p>default</p></td>
+<td colspan="3"><p>null</p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p><span class="xref std std-ref">#/defs/SrcInfo</span></p></td>
 </tr>
 </tbody>
 </table>
@@ -808,6 +881,22 @@ to also define a task named <cite>rtl</cite>.</p>
 </tr>
 <tr class="row-odd"><td><p>anyOf</p></td>
 <td><p>type</p></td>
+<td><p><em>null</em></p></td>
+</tr>
+<tr class="row-even"><td rowspan="4"><ul class="simple">
+<li><p>srcinfo</p></li>
+</ul>
+</td>
+<td colspan="3"><p><em>Srcinfo</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>default</p></td>
+<td colspan="2"><p>null</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p>anyOf</p></td>
+<td><p>type</p></td>
+<td><p><em>string</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
 <td><p><em>null</em></p></td>
 </tr>
 </tbody>

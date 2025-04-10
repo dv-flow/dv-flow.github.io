@@ -23,29 +23,133 @@ The implementation of a task is required to perform three key tasks:
 Using Tasks
 ===========
 
-Most tasks are built on top of another existing task. 
+Most tasks are built on top of another existing task or tasks.These
+'derived' tasks either modifiy the `parameters` of the base task
+to cause it to behave as desired, or compose multiple tasks together
+to achieve the desired functionality.
 
-* Base task (uses)
+Specifying the Base Task
+------------------------
+Each defined task has a unique identity. Typically, though, the required 
+behavior is very similar to an existing task. As a consequence,
+it is very common to define a task in terms of another. This is
+done via the `uses` clause.
 
-* Setting parameters (with)
+.. code-block:: yaml
+    
+    tasks:
+    - name: PrintHello
+      uses: std.Message
 
-* Specifying dependencies (needs)
+The example above creates a new task named `PrintHello` that
+inherits the parameters and implementation of the existing
+`std.Message` task. 
 
+
+Specializing Task Parameters
+----------------------------
+The simplest way to leverage existing tasks is to customize the
+value of parameters that control the behavior of the base task.
+Let's take a look at the `std.Message` task. This task displays
+a user-specified message string. By default, the message is empty. 
+
+.. code-block:: yaml
+    
+    tasks:
+    - name: PrintHello
+      uses: std.Message
+      with:
+        msg: Hello, World!
+
+The example above creates a new task named `PrintHello` that 
+overrides the value of the `msg` parameter. This causes 
+the implementation of `std.Message` to print 'Hello, World!'.
+
+Specifying Dependencies
+-----------------------
+Most tasks operate on data produced by other tasks. The `needs` clause
+specifies the tasks that must complete before this task can execute.
+
+.. code-block:: yaml
+    
+    tasks:
+    - name: rtlfiles
+      uses: std.FileSet
+      with:
+        type: "verilogSource"
+        base: "rtl"
+        include: "*.v"
+    - name: sim
+      uses: hdlsim.vlt.SimImage
+      needs: [rtlfiles]
+      with:
+        top: [mytop]
+    - name: run
+      uses: hdlsim.vlt.SimRun
+      needs: [sim]
+
+The example above shows three tasks that:
+
+* Gather verilog source files from the `rtl` directory
+* Compile the files into a simulation image 
+* Run the simulation image
+
+Data passes between each pair of steps above:
+
+* `rtlfiles` outputs a list of sources files required to create a simulation image
+* The sim-image task passes a path to the simulation image to the task that runs it
+
+In addition, one step cannot proceed until the proceeding step has completed. These
+scheduling and dataflow requirements are captured using `needs` relationships.
 
 
 Using Compound Tasks
-====================
+--------------------
 
 Compound tasks allow a task to be defined in terms of a set 
-of other tasks. In many cases, this allows more-advanced behavior
+of subtasks. In many cases, this allows more-advanced behavior
 to be created without the need to provide a programming-language
 implementation for the task.
 
+.. code-block:: yaml
 
-Compound-Task Strategy
-----------------------
+    tasks:
+    - name: CreateSVFiles
+      rundir: inherit
+      body:
+      - name: mod1
+        uses: std.CreateFile
+        with:
+            filename: mod1.sv
+            content: |
+                module mod1;
+                endmodule
+      - name: mod2
+        uses: std.CreateFile
+        with:
+            filename: mod2.sv
+            content: |
+                module mod2;
+                endmodule
+      - name: getFiles
+        uses: std.FileSet
+        passthrough: none
+        needs: [mod1, mod2]
+        with:
+            type: "verilogSource"
+            base: "."
+            include: "*.sv"
+
+The compound task above uses the `std.CreateFile` task to create 
+two SystmeVerilog files. We then want to pass both files on to
+all tasks depend on CreateSVFiles. 
+
+This is accomplished by:
+
+* Specifying that all tasks use the same run directory via the
+    `rundir: inherit` clause. 
+* Causing the `getFiles` to depend on the file-creation tasks
 
 
-Compound tasks support 
 
 
