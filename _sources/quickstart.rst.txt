@@ -13,11 +13,11 @@ DV Flow Manager is most-easily installed from the PyPi repository:
     % pip install dv-flow-mgr
 
 
-Once installed, DV Flow Mananager can be invoked using the `dvfm` command:
+Once installed, DV Flow Mananager can be invoked using the `dfm` command:
 
 .. code-block:: bash
 
-    % dvfm --help
+    % dfm --help
 
 
 ===============
@@ -53,37 +53,33 @@ simulate this module.
     package:
         name: my_design
 
-        imports:
-          - name: hdl.sim.vlt
-            as: hdl.sim
-
         tasks:
           - name: rtl
-            type: std.FileSet
+            uses: std.FileSet
             with:
               type: "systemVerilogSource"
               include: "*.sv"
 
           - name: sim-image
-            type: hdl.sim.SimImage
+            uses: hdlsim.vlt.SimImage
             with:
               - top: [top]
             needs: [rtl]
 
           - name: sim-run
-            type: hdl.sim.SimRun
+            uses: hdlsim.vlt.SimRun
             needs: [sim-image]
 
 
-If we run the `dvfm run` command, DV Flow Manager will:
+If we run the `dfm run` command, DV Flow Manager will:
 
-- Find all files with a `.sv` extension in the current directory
-- Compile them into a simulation image
-- Run the simulation image
+* Find all files with a `.sv` extension in the current directory
+* Compile them into a simulation image
+* Run the simulation image
 
 .. code-block:: bash
 
-    % dvfm run sim-run
+    % dfm run sim-run
 
 This will compile the source, build a simulation image for module `top`,
 and run the resulting image. Not too bad for 20-odd lines of build specification.
@@ -97,30 +93,16 @@ Let's break this down just a bit:
     package:
         name: my_design
 
-        imports:
-          - name: hdl.sim.vlt
-            as: hdl.sim
 
-DV Flow Manager views the world as a series of *packages* that reference each
-other and contain *tasks* to operate on sources within the *packages*.
-
-Here, we have declared a new package (my_design) and specified that it 
-references a built-in package named `hdl.sim.vlt`. This is a package that
-implements tasks for performing HDL simulation with the Verilator simulator.
-
-Note that we specify an alias (hdl.sim) for the package when importing it.
-This will allow us to easily swap in a different simulator without changing
-anything else within our package definition.
+DV Flow views the world as a series of *packages* that reference each
+other and contain *tasks* to operate on sources.  Here, we have declared 
+a new package named my_design.
 
 .. code-block:: yaml
-    :emphasize-lines: 8,12
+    :emphasize-lines: 5-9
 
     package:
         name: my_design
-
-        imports:
-          - name: hdl.sim.vlt
-            as: hdl.sim
 
         tasks:
           - name: rtl
@@ -132,3 +114,55 @@ anything else within our package definition.
 Our first task is to specify the sources we want to process. This is done
 by specifying a `FileSet` task. The parameters of this task specify where
 the task should look for sources and which sources it should include
+
+.. code-block:: yaml
+    :emphasize-lines: 11-15
+
+    package:
+        name: my_design
+
+        tasks:
+          - name: rtl
+            uses: std.FileSet
+            with:
+              type: "systemVerilogSource"
+              include: "*.sv"
+
+          - name: sim-image
+            uses: hdlsim.vlt.SimImage
+            with:
+              - top: [top]
+            needs: [rtl]
+
+Next, we use the `SimImage` task to compile the sources into a simulation
+image. The `sim-image` task receives the list of files to compile from
+the tasks that it depends on -- in this case, the `rtl` task. The `sim-image`
+task outputs a path to the directory containing the simulation image.
+
+.. code-block:: yaml
+    :emphasize-lines: 17-19
+
+    package:
+        name: my_design
+
+        tasks:
+          - name: rtl
+            uses: std.FileSet
+            with:
+              type: "systemVerilogSource"
+              include: "*.sv"
+
+          - name: sim-image
+            uses: hdlsim.vlt.SimImage
+            with:
+              - top: [top]
+            needs: [rtl]
+
+          - name: sim-run
+            uses: hdlsim.vlt.SimRun
+            needs: [sim-image]
+
+Finally, we run use the `sim-run` task to run the simulation image. This
+task takes the output from the `sim-image` task (the simulation image directory)
+as input. 
+

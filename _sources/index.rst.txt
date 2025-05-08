@@ -25,10 +25,10 @@ tools for working with that specification.
 
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
    :caption: Contents:
 
-   quickstart
    intro
+   quickstart
    userguide/index
    reference
