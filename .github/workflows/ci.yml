@@ -16,6 +16,7 @@ jobs:
         ./packages/python/bin/python -m pip install ivpm --upgrade
         ./packages/python/bin/python3 -m ivpm update -a
         ./packages/python/bin/pip show packaging
+        ./packages/python/bin/pip install packaging
     - name: Build Docs
       run: |
         cd docs

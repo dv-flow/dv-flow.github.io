@@ -24,4 +24,6 @@ package:
       src: pypi
     - name: sphinx-external-toc
       src: pypi
+    - name: packaging
+      src: pypi
 
