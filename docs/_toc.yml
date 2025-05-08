@@ -2,8 +2,8 @@
 root: index
 entries:
 #- file: intro
-- file: userguide/index
-- file: reference
+#- file: userguide/index
+#- file: reference
 - title: DV Flow Manager
   url: "https://dv-flow.github.io/dv-flow-mgr"
 - title: HDLSim Library
