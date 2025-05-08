@@ -11,6 +11,8 @@ package:
       src: pypi
     - name: sphinxcontrib-mermaid
       src: pypi
+    - name: sphinx-external-toc
+      src: pypi
     - name: dv-flow-mgr
       url: https://github.com/dv-flow/dv-flow-mgr.git
 
@@ -18,6 +20,6 @@ package:
     deps:
     - name: pytest
       src: pypi
-    - name: svdep
-      url: https://github.com/fvutils/svdep.git
+    - name: sphinx-external-toc
+      src: pypi
 

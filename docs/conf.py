@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'DV Flow Manager'
+project = 'DV Flow'
 copyright = '2023-2025, Matthew Ballance'
 author = 'Matthew Ballance'
 
@@ -15,8 +15,12 @@ author = 'Matthew Ballance'
 
 extensions = [
     'sphinx-jsonschema',
-    'sphinxcontrib.mermaid'
+    'sphinxcontrib.mermaid',
+    'sphinx_external_toc'
 ]
+
+external_toc_path = "_toc.yml"
+external_toc_exclude_missing = False
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
