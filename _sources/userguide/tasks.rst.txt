@@ -102,6 +102,32 @@ Data passes between each pair of steps above:
 In addition, one step cannot proceed until the proceeding step has completed. These
 scheduling and dataflow requirements are captured using `needs` relationships.
 
+Tasks and Dataflow
+------------------
+Task `needs` relationships specify dataflow between tasks in addition to 
+scheduling dependencies. A task provides two controls over what input
+data is provided to the task implementation (if present) and what inputs
+are forwarded to the output. 
+
+.. image:: imgs/task_dataflow.excalidraw.svg
+
+The two controls are:
+
+* **consumes** - Specifies what input data will be passed to the implementation
+  * **all** - All input data is passed to the implementation
+  * **none** - No input data is passed to the implementation
+  * *pattern* - Inputs matching a pattern are passed to the implementation
+* **passthrough** - Specifies what inputs are passed to the task output
+  * **all** - All input data is passed to the output
+  * **none** - No input data is passed to the output
+  * **unused** - Inputs that are not consumed are passed to the output
+  * *pattern* - Inputs matching a pattern are passed to the output
+
+The default value of `passthrough` is always **unused**. The default value for the 
+`consumes`` parameter depends on the task type:
+
+* **Shell or Python Implementation**: all
+* **DataItem or No Implementation**: none
 
 Using Compound Tasks
 ====================

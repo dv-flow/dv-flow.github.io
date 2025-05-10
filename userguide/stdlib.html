@@ -35,32 +35,40 @@
             
   <section id="standard-library">
 <h1>Standard Library<a class="headerlink" href="#standard-library" title="Link to this heading">¶</a></h1>
-<section id="std-exec">
-<h2>std.Exec<a class="headerlink" href="#std-exec" title="Link to this heading">¶</a></h2>
-<p>Runs a shell command.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>package:
-  name: exec.example
+<section id="std-createfile">
+<h2>std.CreateFile<a class="headerlink" href="#std-createfile" title="Link to this heading">¶</a></h2>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">create</span>
 
-  tasks:
-  - name: list_dir
-    uses: std.Exec
-    with:
-      command: |
-        ls ${{ srcdir }} &gt;&gt; srcdir_files.txt
+    <span class="n">tasks</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">TemplateFile</span>
+        <span class="n">uses</span><span class="p">:</span> <span class="n">std</span><span class="o">.</span><span class="n">CreateFile</span>
+        <span class="k">with</span><span class="p">:</span>
+          <span class="nb">type</span><span class="p">:</span> <span class="n">text</span>
+          <span class="n">filename</span><span class="p">:</span> <span class="n">template</span><span class="o">.</span><span class="n">txt</span>
+          <span class="n">content</span><span class="p">:</span> <span class="o">|</span>
+            <span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">template</span> <span class="n">file</span>
+            <span class="k">with</span> <span class="n">multiple</span> <span class="n">lines</span>
+            <span class="n">of</span> <span class="n">text</span><span class="o">.</span>
 </pre></div>
 </div>
-<p>The example above runs the Unix <cite>ls</cite> command and saves the
-output to a text file.</p>
+</section>
+<section id="consumes">
+<h3>Consumes<a class="headerlink" href="#consumes" title="Link to this heading">¶</a></h3>
+</section>
+<section id="produces">
+<h3>Produces<a class="headerlink" href="#produces" title="Link to this heading">¶</a></h3>
+<p>Produces a <cite>std.FileSet</cite> parameter set containing a single file</p>
+</section>
 <section id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
 <ul class="simple">
-<li><p><cite>command</cite> – The command to run. The command may be a single line or
-multiple lines. The command is executed in a shell, so shell features
-such as pipes and redirection are available.</p></li>
+<li><p><strong>type</strong> - [Required] Specifies the <cite>filetype</cite> of the produced fileset</p></li>
+<li><p><strong>filename</strong> - [Required] Name of the file to produce</p></li>
+<li><p><strong>incdir</strong> - [Optional] If ‘true’, adds the output directory as an include directory</p></li>
 </ul>
-</section>
-<section id="input-output">
-<h3>Input/Output<a class="headerlink" href="#input-output" title="Link to this heading">¶</a></h3>
 </section>
 </section>
 <section id="std-fileset">
@@ -68,6 +76,8 @@ such as pipes and redirection are available.</p></li>
 <p>Creates a ‘FileSet’ parameter set from a specification. This task is
 primarily used to build up list of files for processing by HDL compilation
 tools.</p>
+<section id="id1">
+<h3>Example<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span><span class="p">:</span>
     <span class="n">name</span><span class="p">:</span> <span class="n">fileset</span><span class="o">.</span><span class="n">example</span>
 
@@ -83,14 +93,24 @@ tools.</p>
 <p>The example above finds all files with a <cite>.v</cite> extension in the <cite>src/rtl</cite>
 subdirectory of the task’s source directory. The task emits a FileSet
 parameter set having the filetype of <cite>verilogSource</cite>.</p>
-<section id="id1">
-<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
 </section>
 <section id="id2">
-<h3>Input/Output<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
-<p>A FileSet task propagates all of its inputs (eg passthrough=all). It
-produces an additional data item of type <cite>std.FileSet</cite> with the
-specified file type, base directory, and file list.</p>
+<h3>Consumes<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+</section>
+<section id="id3">
+<h3>Produces<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>Produces a <cite>std.FileSet</cite> parameter set containing files matched by the parameter specification.</p>
+</section>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>type</strong> - [Required] Specifies the <cite>filetype</cite> of the produced fileset</p></li>
+<li><p><strong>base</strong> - [Optional] Base directory for the fileset. Defaults to the task’s source directory</p></li>
+<li><p><strong>include</strong> - [Required] Set of file patterns to include in the fileset. Glob patterns may be used</p></li>
+<li><p><strong>exclude</strong> - [Optional] Set of file patterns to exclude from the fileset. Glob patterns may be used</p></li>
+<li><p><strong>incdirs</strong> - [Optional] Set of include directories that consumers of the fileset must use</p></li>
+<li><p><strong>defines</strong> - [Optional] Set of pre-processor defines that consumers of the fileset must use</p></li>
+</ul>
 </section>
 </section>
 </section>

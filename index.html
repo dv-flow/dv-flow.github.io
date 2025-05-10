@@ -42,10 +42,12 @@ window.addEventListener("load", () => mermaid.run());
             
   <section id="dv-flow">
 <h1>DV Flow<a class="headerlink" href="#dv-flow" title="Link to this heading">¶</a></h1>
-<p>DV Flow provides a “make for silicon engineering”: a specification
-for capturing design and verification (DV) tasks and dataflow in a way that
-enables concurrent execution and efficient avoidance of redundant work, and
-tools for working with that specification.</p>
+<p>DV Flow defines a build-flow specification targeted at silicon design and
+verification workflows. The specification centers around parameterized
+tasks connected by dataflow. A set of libraries for common tasks is provided.
+Users can use these tasks as-is, as well as develop new tasks. Tools are
+provided to execute workflows defined in DV Flow syntax and assist with
+their development.</p>
 <pre  class="mermaid">
         flowchart TD
   A[IP Fileset] --&gt; B[Testbench]
@@ -55,7 +57,15 @@ tools for working with that specification.</p>
   E --&gt; F[Test1]
   E --&gt; G[Test2]
   E --&gt; H[Test3]
-    </pre><div class="toctree-wrapper compound">
+    </pre><ul class="simple">
+<li><p><strong>DV Flow Manager</strong> - DV Flow execution tool</p></li>
+<li><p><strong>pytest Extension</strong> - Allows DV Flow tasks to be used in pytest unit tests</p></li>
+<li><p><strong>VSCode Extension</strong> - Provides navigation and visualization tools inside VSCode</p></li>
+<li><p><strong>HDLSim Library</strong> - Tasks for compiling and simulating HDL code</p></li>
+<li><p><strong>PSS Library</strong> - Tasks for generating tests from Accellera Portable Stimulus Specification (PSS) models</p></li>
+<li><p><strong>IDE Library</strong> - Tasks for producing filelists to support HDL integrated development environments</p></li>
+</ul>
+<div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>

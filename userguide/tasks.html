@@ -125,6 +125,32 @@ specifies the tasks that must complete before this task can execute.</p>
 <p>In addition, one step cannot proceed until the proceeding step has completed. These
 scheduling and dataflow requirements are captured using <cite>needs</cite> relationships.</p>
 </section>
+<section id="tasks-and-dataflow">
+<h3>Tasks and Dataflow<a class="headerlink" href="#tasks-and-dataflow" title="Link to this heading">¶</a></h3>
+<p>Task <cite>needs</cite> relationships specify dataflow between tasks in addition to
+scheduling dependencies. A task provides two controls over what input
+data is provided to the task implementation (if present) and what inputs
+are forwarded to the output.</p>
+<img alt="../_images/task_dataflow.excalidraw.svg" src="../_images/task_dataflow.excalidraw.svg" />
+<p>The two controls are:</p>
+<ul class="simple">
+<li><p><strong>consumes</strong> - Specifies what input data will be passed to the implementation
+* <strong>all</strong> - All input data is passed to the implementation
+* <strong>none</strong> - No input data is passed to the implementation
+* <em>pattern</em> - Inputs matching a pattern are passed to the implementation</p></li>
+<li><p><strong>passthrough</strong> - Specifies what inputs are passed to the task output
+* <strong>all</strong> - All input data is passed to the output
+* <strong>none</strong> - No input data is passed to the output
+* <strong>unused</strong> - Inputs that are not consumed are passed to the output
+* <em>pattern</em> - Inputs matching a pattern are passed to the output</p></li>
+</ul>
+<p>The default value of <cite>passthrough</cite> is always <strong>unused</strong>. The default value for the
+<cite>consumes`</cite> parameter depends on the task type:</p>
+<ul class="simple">
+<li><p><strong>Shell or Python Implementation</strong>: all</p></li>
+<li><p><strong>DataItem or No Implementation</strong>: none</p></li>
+</ul>
+</section>
 </section>
 <section id="using-compound-tasks">
 <h2>Using Compound Tasks<a class="headerlink" href="#using-compound-tasks" title="Link to this heading">¶</a></h2>
