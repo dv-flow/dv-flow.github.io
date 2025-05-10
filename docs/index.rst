@@ -6,10 +6,12 @@
 DV Flow
 =======
 
-DV Flow provides a "make for silicon engineering": a specification
-for capturing design and verification (DV) tasks and dataflow in a way that
-enables concurrent execution and efficient avoidance of redundant work, and
-tools for working with that specification.
+DV Flow defines a build-flow specification targeted at silicon design and 
+verification workflows. The specification centers around parameterized 
+tasks connected by dataflow. A set of libraries for common tasks is provided.
+Users can use these tasks as-is, as well as develop new tasks. Tools are
+provided to execute workflows defined in DV Flow syntax and assist with 
+their development.
 
 .. mermaid::
 
@@ -22,6 +24,12 @@ tools for working with that specification.
       E --> G[Test2]
       E --> H[Test3]
 
+* **DV Flow Manager** - DV Flow execution tool
+* **pytest Extension** - Allows DV Flow tasks to be used in pytest unit tests
+* **VSCode Extension** - Provides navigation and visualization tools inside VSCode
+* **HDLSim Library** - Tasks for compiling and simulating HDL code
+* **PSS Library** - Tasks for generating tests from Accellera Portable Stimulus Specification (PSS) models
+* **IDE Library** - Tasks for producing filelists to support HDL integrated development environments
 
 
 .. toctree::
