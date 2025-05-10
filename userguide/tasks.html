@@ -134,15 +134,21 @@ are forwarded to the output.</p>
 <img alt="../_images/task_dataflow.excalidraw.svg" src="../_images/task_dataflow.excalidraw.svg" />
 <p>The two controls are:</p>
 <ul class="simple">
-<li><p><strong>consumes</strong> - Specifies what input data will be passed to the implementation
-* <strong>all</strong> - All input data is passed to the implementation
-* <strong>none</strong> - No input data is passed to the implementation
-* <em>pattern</em> - Inputs matching a pattern are passed to the implementation</p></li>
-<li><p><strong>passthrough</strong> - Specifies what inputs are passed to the task output
-* <strong>all</strong> - All input data is passed to the output
-* <strong>none</strong> - No input data is passed to the output
-* <strong>unused</strong> - Inputs that are not consumed are passed to the output
-* <em>pattern</em> - Inputs matching a pattern are passed to the output</p></li>
+<li><p><strong>consumes</strong> - Specifies what input data will be passed to the implementation</p>
+<ul>
+<li><p><strong>all</strong> - All input data is passed to the implementation</p></li>
+<li><p><strong>none</strong> - No input data is passed to the implementation</p></li>
+<li><p><em>pattern</em> - Inputs matching a pattern are passed to the implementation</p></li>
+</ul>
+</li>
+<li><p><strong>passthrough</strong> - Specifies what inputs are passed to the task output</p>
+<ul>
+<li><p><strong>all</strong> - All input data is passed to the output</p></li>
+<li><p><strong>none</strong> - No input data is passed to the output</p></li>
+<li><p><strong>unused</strong> - Inputs that are not consumed are passed to the output</p></li>
+<li><p><em>pattern</em> - Inputs matching a pattern are passed to the output</p></li>
+</ul>
+</li>
 </ul>
 <p>The default value of <cite>passthrough</cite> is always <strong>unused</strong>. The default value for the
 <cite>consumes`</cite> parameter depends on the task type:</p>

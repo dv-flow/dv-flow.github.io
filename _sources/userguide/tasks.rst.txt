@@ -114,10 +114,12 @@ are forwarded to the output.
 The two controls are:
 
 * **consumes** - Specifies what input data will be passed to the implementation
+
   * **all** - All input data is passed to the implementation
   * **none** - No input data is passed to the implementation
   * *pattern* - Inputs matching a pattern are passed to the implementation
 * **passthrough** - Specifies what inputs are passed to the task output
+
   * **all** - All input data is passed to the output
   * **none** - No input data is passed to the output
   * **unused** - Inputs that are not consumed are passed to the output
