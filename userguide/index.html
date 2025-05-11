@@ -12,6 +12,14 @@
     <script src="../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="DV-Flow Fundamentals" href="fundamentals.html" />
@@ -35,6 +43,103 @@
             
   <section id="user-guide">
 <h1>User Guide<a class="headerlink" href="#user-guide" title="Link to this heading">¶</a></h1>
+<p>DV Flow input specification builds on three key concepts:</p>
+<ul class="simple">
+<li><p><strong>Package</strong> - A packages is a parameterized namespace that defines tasks and types.</p></li>
+<li><p><strong>Task</strong> - A task is a processing step in a flow. Tasks represent a data-processing step, which
+might be as simple as building a list of files, or might be a complex as creating a hardened macro
+from multiple source collections.</p></li>
+<li><p><strong>Dataflow Dependencies</strong> - Tasks are related by dataflow dependencies. In order for a task to
+execute, the data from all of its dependencies must be available. Each task also produces
+dataflow items that can be consumed by other tasks.</p></li>
+</ul>
+<p>The execution graph of a root task (or tasks) and its dependencies is statically known.
+The precise data conveyed between tasks via dataflow is only known at runtime.</p>
+<p>Let’s look at an example to better-understand these concepts.</p>
+<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="nt">package</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_ip</span>
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rtl</span>
+<span class="w">      </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">std.Fileset</span>
+<span class="w">      </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">base</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rtl&quot;</span>
+<span class="w">        </span><span class="nt">include</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*.sv&quot;</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tb</span>
+<span class="w">      </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">std.Fileset</span>
+<span class="w">      </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">rtl</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">base</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;tb&quot;</span>
+<span class="w">        </span><span class="nt">include</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*.sv&quot;</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sim</span>
+<span class="w">      </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hdlsim.vlt.SimImage</span>
+<span class="w">      </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">rtl</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">tb</span><span class="p p-Indicator">]</span>
+
+<span class="w">    </span><span class="nt">-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test1</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">uses</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hdlsim.vlt.RunSim</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">needs</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">sim</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>The code above specifies two collections of source code –
+one for the design and one for the testbench. This source
+code is compiled into as simulation image using the
+pre-defined task named <cite>hdlsim.vlt.SimImage</cite>. After,
+we execute the simulation image.</p>
+<pre  class="mermaid">
+        flowchart TD
+  A[rtl] --&gt; B[tb]
+  B[tb] --&gt; E[sim]
+  E --&gt; F[test1]
+    </pre><p>The task graph for this flow is shown above. Each step depends on the
+prior step, so there is no opportunity for concurrent execution.</p>
+<p>Now, let’s say that we want to run a series of tests. We can add
+a new task per tests, where we customize the activity that is run
+by passing arguments to the simulation.</p>
+<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="c1"># ...</span>
+<span class="w">    </span><span class="nt">-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test1</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">uses</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hdlsim.vlt.RunSim</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">needs</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">sim</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test2</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">uses</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hdlsim.vlt.RunSim</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">needs</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">sim</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test3</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">uses</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hdlsim.vlt.RunSim</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">needs</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">sim</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<pre  class="mermaid">
+        flowchart TD
+  A[rtl] --&gt; B[tb]
+  B[tb] --&gt; E[sim]
+  E --&gt; F[test1]
+  E --&gt; G[test2]
+  E --&gt; H[test3]
+    </pre><p>Our task graph now looks like the above. Our build tasks are sequential,
+while our test tasks only depend on the simulation image being
+up-to-date, and and can execute concurrently.</p>
+<section id="dataflow">
+<h2>Dataflow<a class="headerlink" href="#dataflow" title="Link to this heading">¶</a></h2>
+<p>What ties all the tasks above together is dependency-based dataflow.</p>
+<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tb</span>
+<span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">std.Fileset</span>
+<span class="w">  </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">rtl</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">base</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;tb&quot;</span>
+<span class="w">    </span><span class="nt">include</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*.sv&quot;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sim</span>
+<span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hdlsim.vlt.SimImage</span>
+<span class="w">  </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">rtl</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">tb</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>When the <cite>sim</cite> task places dependencies on the <cite>rtl</cite> and <cite>tb</cite>
+tasks, it receives the output from those tasks as input. In
+this case, that means that the simulation-image compilation
+task has a list of all of the source files that it needs to
+compile. The <cite>sim</cite> task also produces an output, which contains
+a reference to the directory where the simulation image resides.
+The <cite>test</cite> tasks use this input to locate the simulation image.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="fundamentals.html">DV-Flow Fundamentals</a><ul>
@@ -46,7 +151,9 @@
 <li class="toctree-l1"><a class="reference internal" href="packages.html">Packages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tasks.html">Tasks</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tasks.html#using-tasks">Using Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tasks.html#using-dataitem-tasks">Using DataItem Tasks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tasks.html#using-compound-tasks">Using Compound Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tasks.html#conditional-tasks">Conditional Tasks</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="variables.html">Variables</a></li>
@@ -57,6 +164,7 @@
 </li>
 </ul>
 </div>
+</section>
 </section>
 
 

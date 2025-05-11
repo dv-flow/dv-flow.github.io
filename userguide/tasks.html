@@ -61,7 +61,7 @@ to achieve the desired functionality.</p>
 <section id="specifying-the-base-task">
 <h3>Specifying the Base Task<a class="headerlink" href="#specifying-the-base-task" title="Link to this heading">¶</a></h3>
 <p>Each defined task has a unique identity. Typically, though, the required
-behavior is very similar to an existing task. As a consequence,
+behavior is very similar to that of an existing task. As a consequence,
 it is very common to define a task in terms of another. This is
 done via the <cite>uses</cite> clause.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
@@ -158,6 +158,35 @@ are forwarded to the output.</p>
 </ul>
 </section>
 </section>
+<section id="using-dataitem-tasks">
+<h2>Using DataItem Tasks<a class="headerlink" href="#using-dataitem-tasks" title="Link to this heading">¶</a></h2>
+<p>Tasks generally produce output data. That output data may be produced by the
+task’s programming-language implementation (ie Python) when computation of
+some form is required. When no computation is required, there is concise way
+to produce a data item: define a task that <cite>uses</cite> a data type as the base.
+This is most commonly done when producing a data item that captures a set
+of tool options.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SimOptionsTrace</span>
+<span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hdlsim.SimElabArgs</span>
+<span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">--trace-fst</span><span class="p p-Indicator">]</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sim_img</span>
+<span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hdlsim.vlt.SimImage</span>
+<span class="w">  </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">SimOptionsTrace</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>The <cite>SimOptionsTrace</cite> task above will produce a single <cite>hdlsim.SimElabArgs</cite> data
+item that instructs the <cite>Verilator</cite> simulator to enable dumping a FST-format
+waveform file.</p>
+<p>This has the same effect as adding <cite>–trace-fst</cite> directly on the <cite>sim_img</cite> task,
+but provides more flexibility:</p>
+<ul class="simple">
+<li><p>Tasks can be defined with commonly-used sets of options</p></li>
+<li><p>Conditional task execution can be used to select between option sets</p></li>
+</ul>
+</section>
 <section id="using-compound-tasks">
 <h2>Using Compound Tasks<a class="headerlink" href="#using-compound-tasks" title="Link to this heading">¶</a></h2>
 <p>Compound tasks allow a task to be defined in terms of a set
@@ -194,7 +223,7 @@ implementation for the task.</p>
 </div>
 <p>The compound task above uses the <cite>std.CreateFile</cite> task to create
 two SystmeVerilog files. We then want to pass both files on to
-all tasks depend on CreateSVFiles.</p>
+all tasks that depend on CreateSVFiles.</p>
 <p>This is accomplished by:</p>
 <ul class="simple">
 <li><dl class="simple">
@@ -204,6 +233,38 @@ all tasks depend on CreateSVFiles.</p>
 </li>
 <li><p>Causing the <cite>getFiles</cite> to depend on the file-creation tasks</p></li>
 </ul>
+</section>
+<section id="conditional-tasks">
+<h2>Conditional Tasks<a class="headerlink" href="#conditional-tasks" title="Link to this heading">¶</a></h2>
+<p>By default, all tasks on the <cite>needs</cite> dependency path from the root task(s) will be
+executed. In some cases, though, it is desirable to only execute tasks under specific
+circumstances. The <cite>iff</cite> property of  tasks supports this use model.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">package</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_ip</span>
+<span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">debug_level</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SimOptions</span>
+<span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hdlsim.SimElabArgs</span>
+<span class="w">    </span><span class="nt">body</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SimOptionsDebug</span>
+<span class="w">      </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hdlsim.SimElabArgs</span>
+<span class="w">      </span><span class="nt">iff</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ debug_level &gt; 0 }}</span>
+<span class="w">      </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">--trace-fst</span><span class="p p-Indicator">]</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sim_img</span>
+<span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hdlsim.vlt.SimImage</span>
+<span class="w">    </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">SimOptions</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>The example above uses conditional execution to customize elaboration options.
+When the <cite>debug_level</cite> parameter’s value is greater than 0, the <cite>SimOptionsDebug</cite> task
+sends the <cite>–trace-fst</cite> option to the simulator. Otherwise, no additional arguments are
+provided.</p>
 </section>
 </section>
 
