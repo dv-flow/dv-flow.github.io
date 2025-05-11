@@ -57,6 +57,7 @@ Inline Pytask
 When the task implementation is simple, the code can be in-lined within the YAML.
 
 .. code-block:: yaml
+
     package:
       name: my_tool 
       tasks:
@@ -86,6 +87,7 @@ as parameter values, that are known during elaboration. The graph structure
 cannot be created using data conveyed as dataflow between tasks.
 
 .. code-block:: yaml
+
     package:
       name: my_pkg
       
@@ -104,6 +106,7 @@ generator. As with other task implementations, the generator code can
 be specified externally in a Python module or inline.
 
 .. code-block:: python3
+
     def GenGraph(ctxt, input):
         count = input.params.count
         for i in range(count):

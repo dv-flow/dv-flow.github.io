@@ -67,6 +67,19 @@ is moderately complex or lengthy.</p>
 <section id="inline-pytask">
 <h3>Inline Pytask<a class="headerlink" href="#inline-pytask" title="Link to this heading">¶</a></h3>
 <p>When the task implementation is simple, the code can be in-lined within the YAML.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">package</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_tool</span>
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_task</span>
+<span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_package.MyTask</span>
+<span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">msg</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">    </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytask</span>
+<span class="w">    </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">print(&quot;Message: %s&quot; % input.params.msg)</span>
+</pre></div>
+</div>
 <p>When this task is executed, the body of the <cite>run</cite> entry will be evaluated as the
 body of an async Python method that has <cite>ctxt</cite>, and <cite>input</cite> parameters.</p>
 </section>
@@ -80,10 +93,32 @@ strategy can be provided to algorithmically define a task subgraph.</p>
 means that the generated graph structure may only depend on values, such
 as parameter values, that are known during elaboration. The graph structure
 cannot be created using data conveyed as dataflow between tasks.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">package</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_pkg</span>
+
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SayHi</span>
+<span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">count</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">generate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_pkg.my_mod.GenGraph</span>
+</pre></div>
+</div>
 <p>The <cite>generate</cite> strategy specifies that the containing task will be a
 compound task whose sub-tasks are provided by the specified
 generator. As with other task implementations, the generator code can
 be specified externally in a Python module or inline.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">GenGraph</span><span class="p">(</span><span class="n">ctxt</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">count</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">):</span>
+        <span class="n">ctxt</span><span class="o">.</span><span class="n">addTask</span><span class="p">(</span><span class="n">ctxt</span><span class="o">.</span><span class="n">mkTaskNode</span><span class="p">(</span>
+            <span class="s2">&quot;std.Message&quot;</span><span class="p">,</span> <span class="k">with</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">ctxt</span><span class="o">.</span><span class="n">mkName</span><span class="p">(</span><span class="s2">&quot;SayHi</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">),</span>
+            <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Hello World</span><span class="si">% %</span><span class="s2">d!&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)))</span>
+</pre></div>
+</div>
 <p>See the <a class="reference external" href="https://dv-flow.github.io/dv-flow-mgr">DV Flow Manager</a> documentation
 for more information about the Python task-graph generation API.</p>
 </section>
