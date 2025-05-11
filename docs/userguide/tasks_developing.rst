@@ -73,6 +73,51 @@ When the task implementation is simple, the code can be in-lined within the YAML
 When this task is executed, the body of the `run` entry will be evaluated as the
 body of an async Python method that has `ctxt`, and `input` parameters.
 
+Task-Graph Expansion
+====================
+
+Sometimes build flows need to run multiple variations of the same core step.
+For example, we may wish to run multiple UVM tests that only vary in the
+input arguments. The `matrix` strategy can work well in these cases.
+
+.. code-block:: yaml
+    
+    package:
+      name: my_pkg
+      
+      tasks:
+      - name: SayHi
+        strategy:
+          matrix:
+            who: ["Adam", "Mary", "Joe"]
+        body:
+          - name: Output
+            uses: std.Message
+            with:
+              msg: "Hello ${{ matrix.who }}!"
+
+The `matrix` strategy is only valid on compound tasks. The body tasks
+are evaluated once for each combination of matrix variables. Body-task
+parameters can reference the matrix variables. 
+
+In this case, we would expect the `SayHi` task to look like this 
+when expanded:
+
+.. mermaid::
+
+    flowchart TD
+      A[SayHi.in] 
+      B[SayHi.Output1 (Hello Adam!)]
+      C[SayHi.Output2 (Hello Mary!)]
+      D[SayHi.Output3 (Hello Joe!)]
+      E[SayHi]
+      A --> B
+      A --> C
+      A --> D
+      B --> E 
+      C --> E
+      D --> E
+
 
 Task-Graph Generation
 =====================

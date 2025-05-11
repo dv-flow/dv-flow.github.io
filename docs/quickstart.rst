@@ -31,7 +31,7 @@ design, its testbench, synthesis flows, etc.
 
 A key goal of DV Flow Manager is to be easy enough to use that there is no need
 to create the `runit.sh` shell script in the first place. We can start by creating 
-a `flow.yaml` file and just continue evolving our flow definition as the project grows.
+a `flow.dv` file and just continue evolving our flow definition as the project grows.
 
 Let's create a little top-level module for our design named `top.sv`:
 
@@ -45,7 +45,7 @@ Let's create a little top-level module for our design named `top.sv`:
     endmodule
 
 
-Now, we'll create a minimal `flow.yaml` file that will allow us to compile and 
+Now, we'll create a minimal `flow.dv` file that will allow us to compile and 
 simulate this module.
 
 .. code-block:: yaml
@@ -56,14 +56,11 @@ simulate this module.
         tasks:
           - name: rtl
             uses: std.FileSet
-            with:
-              type: "systemVerilogSource"
-              include: "*.sv"
+            with: { type: "systemVerilogSource", include: "*.sv" }
 
           - name: sim-image
             uses: hdlsim.vlt.SimImage
-            with:
-              - top: [top]
+            with: { top: [top] }
             needs: [rtl]
 
           - name: sim-run
@@ -71,7 +68,7 @@ simulate this module.
             needs: [sim-image]
 
 
-If we run the `dfm run` command, DV Flow Manager will:
+If we run the `dfm run sim-run` command, DV Flow Manager will:
 
 * Find all files with a `.sv` extension in the current directory
 * Compile them into a simulation image
@@ -82,7 +79,8 @@ If we run the `dfm run` command, DV Flow Manager will:
     % dfm run sim-run
 
 This will compile the source, build a simulation image for module `top`,
-and run the resulting image. Not too bad for 20-odd lines of build specification.
+and run the resulting image. Not too bad for less than 20 lines of build 
+specification.
 
 A Bit More Detail
 =================
