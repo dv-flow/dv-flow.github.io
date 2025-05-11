@@ -31,7 +31,7 @@ to achieve the desired functionality.
 Specifying the Base Task
 ------------------------
 Each defined task has a unique identity. Typically, though, the required 
-behavior is very similar to an existing task. As a consequence,
+behavior is very similar to that of an existing task. As a consequence,
 it is very common to define a task in terms of another. This is
 done via the `uses` clause.
 
@@ -131,6 +131,41 @@ The default value of `passthrough` is always **unused**. The default value for t
 * **Shell or Python Implementation**: all
 * **DataItem or No Implementation**: none
 
+
+
+Using DataItem Tasks
+==================== 
+
+Tasks generally produce output data. That output data may be produced by the
+task's programming-language implementation (ie Python) when computation of
+some form is required. When no computation is required, there is concise way
+to produce a data item: define a task that `uses` a data type as the base.
+This is most commonly done when producing a data item that captures a set 
+of tool options.
+
+.. code-block:: yaml
+
+    tasks:
+    - name: SimOptionsTrace
+      uses: hdlsim.SimElabArgs
+      with:
+        args: [--trace-fst]
+
+    - name: sim_img
+      uses: hdlsim.vlt.SimImage
+      needs: [SimOptionsTrace]
+
+
+The `SimOptionsTrace` task above will produce a single `hdlsim.SimElabArgs` data
+item that instructs the `Verilator` simulator to enable dumping a FST-format 
+waveform file. 
+
+This has the same effect as adding `--trace-fst` directly on the `sim_img` task, 
+but provides more flexibility:
+
+* Tasks can be defined with commonly-used sets of options
+* Conditional task execution can be used to select between option sets
+
 Using Compound Tasks
 ====================
 
@@ -170,7 +205,7 @@ implementation for the task.
 
 The compound task above uses the `std.CreateFile` task to create 
 two SystmeVerilog files. We then want to pass both files on to
-all tasks depend on CreateSVFiles. 
+all tasks that depend on CreateSVFiles. 
 
 This is accomplished by:
 
@@ -179,5 +214,40 @@ This is accomplished by:
 * Causing the `getFiles` to depend on the file-creation tasks
 
 
+
+Conditional Tasks
+=================
+
+By default, all tasks on the `needs` dependency path from the root task(s) will be
+executed. In some cases, though, it is desirable to only execute tasks under specific
+circumstances. The `iff` property of  tasks supports this use model.
+
+.. code-block:: yaml
+
+    package:
+      name: my_ip
+      with:
+        debug_level:
+          type: int
+          value: 0
+    
+      tasks:
+      - name: SimOptions
+        uses: hdlsim.SimElabArgs
+        body:
+        - name: SimOptionsDebug
+          uses: hdlsim.SimElabArgs
+          iff: ${{ debug_level > 0 }}
+          with:
+            args: [--trace-fst]
+
+      - name: sim_img
+        uses: hdlsim.vlt.SimImage
+        needs: [SimOptions]
+
+The example above uses conditional execution to customize elaboration options. 
+When the `debug_level` parameter's value is greater than 0, the `SimOptionsDebug` task
+sends the `--trace-fst` option to the simulator. Otherwise, no additional arguments are
+provided.
 
 
