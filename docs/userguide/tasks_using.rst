@@ -1,6 +1,6 @@
-#####
-Tasks
-#####
+###########
+Using Tasks
+###########
 
 Tasks are the fundamental unit of behavior in a DV-Flow specification. Tasks
 accept data from tasks that they depend on, and produce data to be used by
@@ -20,16 +20,13 @@ The implementation of a task is required to perform three key tasks:
   to their successor tasks independent of whether the task performed
   a data transformation.
 
-Using Tasks
-===========
-
 Most tasks are built on top of another existing task or tasks.These
 'derived' tasks either modifiy the `parameters` of the base task
 to cause it to behave as desired, or compose multiple tasks together
 to achieve the desired functionality.
 
 Specifying the Base Task
-------------------------
+========================
 Each defined task has a unique identity. Typically, though, the required 
 behavior is very similar to that of an existing task. As a consequence,
 it is very common to define a task in terms of another. This is
@@ -47,7 +44,7 @@ inherits the parameters and implementation of the existing
 
 
 Specializing Task Parameters
-----------------------------
+============================
 The simplest way to leverage existing tasks is to customize the
 value of parameters that control the behavior of the base task.
 Let's take a look at the `std.Message` task. This task displays
@@ -66,7 +63,7 @@ overrides the value of the `msg` parameter. This causes
 the implementation of `std.Message` to print 'Hello, World!'.
 
 Specifying Dependencies
------------------------
+=======================
 Most tasks operate on data produced by other tasks. The `needs` clause
 specifies the tasks that must complete before this task can execute.
 
@@ -103,7 +100,7 @@ In addition, one step cannot proceed until the proceeding step has completed. Th
 scheduling and dataflow requirements are captured using `needs` relationships.
 
 Tasks and Dataflow
-------------------
+==================
 Task `needs` relationships specify dataflow between tasks in addition to 
 scheduling dependencies. A task provides two controls over what input
 data is provided to the task implementation (if present) and what inputs

@@ -2,6 +2,16 @@
 User Guide
 ##########
 
+.. toctree::
+   :maxdepth: 1
+
+   fundamentals
+   packages
+   tasks_using
+   tasks_developing
+   variables
+   stdlib
+
 DV Flow input specification builds on three key concepts:
 
 * **Package** - A packages is a parameterized namespace that defines tasks and types.
@@ -116,11 +126,3 @@ compile. The `sim` task also produces an output, which contains
 a reference to the directory where the simulation image resides.
 The `test` tasks use this input to locate the simulation image.
 
-.. toctree::
-   :maxdepth: 2
-
-   fundamentals
-   packages
-   tasks
-   variables
-   stdlib
