@@ -43,6 +43,16 @@ window.addEventListener("load", () => mermaid.run());
             
   <section id="user-guide">
 <h1>User Guide<a class="headerlink" href="#user-guide" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fundamentals.html">DV-Flow Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages.html">Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tasks_using.html">Using Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tasks_developing.html">Developing Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variables.html">Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stdlib.html">Standard Library</a></li>
+</ul>
+</div>
 <p>DV Flow input specification builds on three key concepts:</p>
 <ul class="simple">
 <li><p><strong>Package</strong> - A packages is a parameterized namespace that defines tasks and types.</p></li>
@@ -140,30 +150,6 @@ task has a list of all of the source files that it needs to
 compile. The <cite>sim</cite> task also produces an output, which contains
 a reference to the directory where the simulation image resides.
 The <cite>test</cite> tasks use this input to locate the simulation image.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="fundamentals.html">DV-Flow Fundamentals</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="fundamentals.html#tasks">Tasks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fundamentals.html#packages">Packages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fundamentals.html#dataflow">Dataflow</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="packages.html">Packages</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tasks.html">Tasks</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#using-tasks">Using Tasks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#using-dataitem-tasks">Using DataItem Tasks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#using-compound-tasks">Using Compound Tasks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#conditional-tasks">Conditional Tasks</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="variables.html">Variables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="stdlib.html">Standard Library</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="stdlib.html#std-createfile">std.CreateFile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="stdlib.html#std-fileset">std.FileSet</a></li>
-</ul>
-</li>
-</ul>
-</div>
 </section>
 </section>
 
