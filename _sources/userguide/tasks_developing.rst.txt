@@ -106,10 +106,10 @@ when expanded:
 .. mermaid::
 
     flowchart TD
-      A[SayHi.in] 
-      B[SayHi.Output1 (Hello Adam!)]
-      C[SayHi.Output2 (Hello Mary!)]
-      D[SayHi.Output3 (Hello Joe!)]
+      A[SayHi.in]
+      B[Hello Adam!]
+      C[Hello Mary!]
+      D[Hello Joe!]
       E[SayHi]
       A --> B
       A --> C
