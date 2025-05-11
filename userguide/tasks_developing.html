@@ -12,6 +12,14 @@
     <script src="../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Variables" href="variables.html" />
@@ -84,6 +92,45 @@ is moderately complex or lengthy.</p>
 body of an async Python method that has <cite>ctxt</cite>, and <cite>input</cite> parameters.</p>
 </section>
 </section>
+<section id="task-graph-expansion">
+<h2>Task-Graph Expansion<a class="headerlink" href="#task-graph-expansion" title="Link to this heading">¶</a></h2>
+<p>Sometimes build flows need to run multiple variations of the same core step.
+For example, we may wish to run multiple UVM tests that only vary in the
+input arguments. The <cite>matrix</cite> strategy can work well in these cases.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">package</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_pkg</span>
+
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SayHi</span>
+<span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">who</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;Adam&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;Mary&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;Joe&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">body</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Output</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">std.Message</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Hello</span><span class="nv"> </span><span class="s">${{</span><span class="nv"> </span><span class="s">matrix.who</span><span class="nv"> </span><span class="s">}}!&quot;</span>
+</pre></div>
+</div>
+<p>The <cite>matrix</cite> strategy is only valid on compound tasks. The body tasks
+are evaluated once for each combination of matrix variables. Body-task
+parameters can reference the matrix variables.</p>
+<p>In this case, we would expect the <cite>SayHi</cite> task to look like this
+when expanded:</p>
+<pre  class="mermaid">
+        flowchart TD
+  A[SayHi.in]
+  B[SayHi.Output1 (Hello Adam!)]
+  C[SayHi.Output2 (Hello Mary!)]
+  D[SayHi.Output3 (Hello Joe!)]
+  E[SayHi]
+  A --&gt; B
+  A --&gt; C
+  A --&gt; D
+  B --&gt; E
+  C --&gt; E
+  D --&gt; E
+    </pre></section>
 <section id="task-graph-generation">
 <h2>Task-Graph Generation<a class="headerlink" href="#task-graph-generation" title="Link to this heading">¶</a></h2>
 <p>It is sometimes useful to generate task graphs programmatically instead of
