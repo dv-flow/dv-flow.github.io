@@ -133,6 +133,21 @@ to also define a task named <cite>rtl</cite>.</p>
 <tr class="row-odd"><td colspan="2"><p><a class="reference internal" href="#packageimportspec"><span class="std std-ref">PackageImportSpec</span></a></p></td>
 </tr>
 <tr class="row-even"><td rowspan="4"><ul class="simple">
+<li><p>overrides</p></li>
+</ul>
+</td>
+<td colspan="4"><p><em>Overrides</em></p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>Overrides for packages and parameters</p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td colspan="3"><p><em>object</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>additionalProperties</p></td>
+<td><p>type</p></td>
+<td colspan="2"><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td rowspan="4"><ul class="simple">
 <li><p>fragments</p></li>
 </ul>
 </td>
@@ -694,28 +709,41 @@ to also define a task named <cite>rtl</cite>.</p>
 <tr class="row-even"><td><p>type</p></td>
 <td colspan="2"><p><em>null</em></p></td>
 </tr>
-<tr class="row-odd"><td rowspan="7"><ul class="simple">
+<tr class="row-odd"><td rowspan="3"><ul class="simple">
+<li><p>generate</p></li>
+</ul>
+</td>
+<td><p>default</p></td>
+<td colspan="3"><p>null</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p>anyOf</p></td>
+<td colspan="3"><p><span class="xref std std-ref">#/defs/GenerateSpec</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="2"><p><em>null</em></p></td>
+</tr>
+<tr class="row-even"><td rowspan="7"><ul class="simple">
 <li><p>matrix</p></li>
 </ul>
 </td>
 <td colspan="4"><p><em>Matrix</em></p></td>
 </tr>
-<tr class="row-even"><td colspan="4"><p>Matrix of parameter values to explore</p></td>
+<tr class="row-odd"><td colspan="4"><p>Matrix of parameter values to explore</p></td>
 </tr>
-<tr class="row-odd"><td><p>default</p></td>
+<tr class="row-even"><td><p>default</p></td>
 <td colspan="3"><p>null</p></td>
 </tr>
-<tr class="row-even"><td rowspan="4"><p>anyOf</p></td>
+<tr class="row-odd"><td rowspan="4"><p>anyOf</p></td>
 <td><p>type</p></td>
 <td colspan="2"><p><em>object</em></p></td>
 </tr>
-<tr class="row-odd"><td rowspan="2"><p>additionalProperties</p></td>
+<tr class="row-even"><td rowspan="2"><p>additionalProperties</p></td>
 <td><p>type</p></td>
 <td><p><em>array</em></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p>items</p></td>
+<tr class="row-odd"><td colspan="2"><p>items</p></td>
 </tr>
-<tr class="row-odd"><td><p>type</p></td>
+<tr class="row-even"><td><p>type</p></td>
 <td colspan="2"><p><em>null</em></p></td>
 </tr>
 </tbody>
