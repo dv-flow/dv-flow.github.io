@@ -9,7 +9,7 @@ User Guide
    packages
    tasks_using
    tasks_developing
-   variables
+   configuration
    stdlib
 
 DV Flow input specification builds on three key concepts:
