@@ -485,6 +485,21 @@ to also define a task named <cite>rtl</cite>.</p>
 <td><p>type</p></td>
 <td colspan="2"><p><em>string</em></p></td>
 </tr>
+<tr class="row-odd"><td rowspan="4"><ul class="simple">
+<li><p>feeds</p></li>
+</ul>
+</td>
+<td colspan="4"><p><em>Feeds</em></p></td>
+</tr>
+<tr class="row-even"><td colspan="4"><p>List of tasks that depend on this task (inverse of needs)</p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="3"><p><em>array</em></p></td>
+</tr>
+<tr class="row-even"><td><p>items</p></td>
+<td><p>type</p></td>
+<td colspan="2"><p><em>string</em></p></td>
+</tr>
 <tr class="row-odd"><td rowspan="8"><ul class="simple">
 <li><p>with</p></li>
 </ul>
@@ -862,91 +877,23 @@ to also define a task named <cite>rtl</cite>.</p>
 <tr class="row-odd"><td><p>default</p></td>
 <td colspan="2"><p>null</p></td>
 </tr>
-<tr class="row-even"><td rowspan="4"><ul class="simple">
+<tr class="row-even"><td rowspan="3"><ul class="simple">
+<li><p>desc</p></li>
+</ul>
+</td>
+<td colspan="3"><p><em>Desc</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="2"><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
+<td colspan="2"><p>null</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><ul class="simple">
 <li><p>type</p></li>
 </ul>
 </td>
 <td colspan="3"><p><em>Type</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>default</p></td>
-<td colspan="2"><p>null</p></td>
-</tr>
-<tr class="row-even"><td rowspan="2"><p>anyOf</p></td>
-<td><p>type</p></td>
-<td><p><em>string</em></p></td>
-</tr>
-<tr class="row-odd"><td colspan="2"><p><a class="reference internal" href="#complextype"><span class="std std-ref">ComplexType</span></a></p></td>
-</tr>
-<tr class="row-even"><td rowspan="3"><ul class="simple">
-<li><p>value</p></li>
-</ul>
-</td>
-<td colspan="3"><p><em>Value</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>default</p></td>
-<td colspan="2"><p>null</p></td>
-</tr>
-<tr class="row-even"><td><p>anyOf</p></td>
-<td><p>type</p></td>
-<td><p><em>null</em></p></td>
-</tr>
-<tr class="row-odd"><td rowspan="3"><ul class="simple">
-<li><p>append</p></li>
-</ul>
-</td>
-<td colspan="3"><p><em>Append</em></p></td>
-</tr>
-<tr class="row-even"><td><p>default</p></td>
-<td colspan="2"><p>null</p></td>
-</tr>
-<tr class="row-odd"><td><p>anyOf</p></td>
-<td><p>type</p></td>
-<td><p><em>null</em></p></td>
-</tr>
-<tr class="row-even"><td rowspan="3"><ul class="simple">
-<li><p>prepend</p></li>
-</ul>
-</td>
-<td colspan="3"><p><em>Prepend</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>default</p></td>
-<td colspan="2"><p>null</p></td>
-</tr>
-<tr class="row-even"><td><p>anyOf</p></td>
-<td><p>type</p></td>
-<td><p><em>null</em></p></td>
-</tr>
-<tr class="row-odd"><td rowspan="3"><ul class="simple">
-<li><p>path-append</p></li>
-</ul>
-</td>
-<td colspan="3"><p><em>Path-Append</em></p></td>
-</tr>
-<tr class="row-even"><td><p>default</p></td>
-<td colspan="2"><p>null</p></td>
-</tr>
-<tr class="row-odd"><td><p>anyOf</p></td>
-<td><p>type</p></td>
-<td><p><em>null</em></p></td>
-</tr>
-<tr class="row-even"><td rowspan="3"><ul class="simple">
-<li><p>path-prepend</p></li>
-</ul>
-</td>
-<td colspan="3"><p><em>Path-Prepend</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>default</p></td>
-<td colspan="2"><p>null</p></td>
-</tr>
-<tr class="row-even"><td><p>anyOf</p></td>
-<td><p>type</p></td>
-<td><p><em>null</em></p></td>
-</tr>
-<tr class="row-odd"><td rowspan="4"><ul class="simple">
-<li><p>srcinfo</p></li>
-</ul>
-</td>
-<td colspan="3"><p><em>Srcinfo</em></p></td>
 </tr>
 <tr class="row-even"><td><p>default</p></td>
 <td colspan="2"><p>null</p></td>
@@ -955,7 +902,87 @@ to also define a task named <cite>rtl</cite>.</p>
 <td><p>type</p></td>
 <td><p><em>string</em></p></td>
 </tr>
-<tr class="row-even"><td><p>type</p></td>
+<tr class="row-even"><td colspan="2"><p><a class="reference internal" href="#complextype"><span class="std std-ref">ComplexType</span></a></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><ul class="simple">
+<li><p>value</p></li>
+</ul>
+</td>
+<td colspan="3"><p><em>Value</em></p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
+<td colspan="2"><p>null</p></td>
+</tr>
+<tr class="row-odd"><td><p>anyOf</p></td>
+<td><p>type</p></td>
+<td><p><em>null</em></p></td>
+</tr>
+<tr class="row-even"><td rowspan="3"><ul class="simple">
+<li><p>append</p></li>
+</ul>
+</td>
+<td colspan="3"><p><em>Append</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>default</p></td>
+<td colspan="2"><p>null</p></td>
+</tr>
+<tr class="row-even"><td><p>anyOf</p></td>
+<td><p>type</p></td>
+<td><p><em>null</em></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><ul class="simple">
+<li><p>prepend</p></li>
+</ul>
+</td>
+<td colspan="3"><p><em>Prepend</em></p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
+<td colspan="2"><p>null</p></td>
+</tr>
+<tr class="row-odd"><td><p>anyOf</p></td>
+<td><p>type</p></td>
+<td><p><em>null</em></p></td>
+</tr>
+<tr class="row-even"><td rowspan="3"><ul class="simple">
+<li><p>path-append</p></li>
+</ul>
+</td>
+<td colspan="3"><p><em>Path-Append</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>default</p></td>
+<td colspan="2"><p>null</p></td>
+</tr>
+<tr class="row-even"><td><p>anyOf</p></td>
+<td><p>type</p></td>
+<td><p><em>null</em></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><ul class="simple">
+<li><p>path-prepend</p></li>
+</ul>
+</td>
+<td colspan="3"><p><em>Path-Prepend</em></p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
+<td colspan="2"><p>null</p></td>
+</tr>
+<tr class="row-odd"><td><p>anyOf</p></td>
+<td><p>type</p></td>
+<td><p><em>null</em></p></td>
+</tr>
+<tr class="row-even"><td rowspan="4"><ul class="simple">
+<li><p>srcinfo</p></li>
+</ul>
+</td>
+<td colspan="3"><p><em>Srcinfo</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>default</p></td>
+<td colspan="2"><p>null</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p>anyOf</p></td>
+<td><p>type</p></td>
+<td><p><em>string</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
 <td><p><em>null</em></p></td>
 </tr>
 </tbody>
@@ -1001,6 +1028,7 @@ to also define a task named <cite>rtl</cite>.</p>
 <li class="toctree-l1"><a class="reference external" href="https://dv-flow.github.io/dv-flow-mgr">DV Flow Manager</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://dv-flow.github.io/pytest-dfm">pytest Extension</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://dv-flow.github.io/vscode-dv-flow">VSCode Extension</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://dv-flow.github.io/dv-flow-libcc">C/C++ Library</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://dv-flow.github.io/dv-flow-libhdlsim">HDLSim Library</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://dv-flow.github.io/dv-flow-libide">IDE Library</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://dv-flow.github.io/dv-flow-libpss">PSS Library</a></li>
