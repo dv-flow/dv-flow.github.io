@@ -2,65 +2,62 @@
 Introduction
 ############
 
+DV Flow is a framework for orchestrating data-driven, parameterizable workflows.
+Tasks are connected by dataflow, enabling composable and reusable workflow 
+definitions across many domains.
 
-Many software languages have co-evolved with a build system. For example, C/C++ 
-has Make and CMake. Java has ANT, Maven, and Gradle. All of these build systems
-provide features that cater to specific ways that a given language is processed,
-and provide built-in notions to make setting up simple cases as easy as possible.
+Why DV Flow?
+============
 
-One simple example is Make and a single-file C program. Take the code below:
+Many workflow systems are tightly coupled to specific domains or tools. DV Flow
+takes a different approach: workflows are specified declaratively in YAML, with
+tasks connected by dataflow. This enables:
 
-.. code-block:: C
-    
-    #include <stdio.h>
+- **Data-Driven Execution**: Tasks receive data from their dependencies, decoupling
+  operations from data providers
+- **Parameterization**: Workflows can be specialized through parameters, enabling
+  reuse across different configurations  
+- **Composability**: Tasks and packages support inheritance and extension
 
-    int main() {
-        printf("Hello, world!\n");
-        return 0;
-    }
+Use Cases
+=========
 
+**Silicon Design & Verification**
 
-Make provides enough built-in features that are C/C++-specific that we can create
-an executable from this source file (assume it's named hello.c) simply by running:
+Originally designed for silicon engineering, DV Flow excels at hardware workflows
+where the same source files are processed by multiple tools with different configurations:
 
-.. code-block:: bash
+* Compile designs with UVM testbenches for simulation-based verification
+* Run formal verification with different testbench configurations
+* Target synthesis with specific subsets of the design
 
-    make hello
+**Agentic AI Workflows**
 
-Make knows about C files, it knows about the existance of a C compiler, and it knows
-that an executable can be created from a C file of the same name.
+DV Flow enables agentic workflows by treating prompts, context, and tools as
+reusable tasks:
 
-Meanwhile, in Silicon Engineering Land...
-=========================================
+* Encapsulate prompts and context as parameterizable tasks
+* Chain agentic and non-agentic operations in the same workflow
+* Run sub-workflows composed of multiple operations
 
-Much like software languages, the languages, tools, and flows used in silicon engineering
-have their own unique characteristics. For example, in a silicon-design environment, many 
-flows are run over the same source files -- possibly with different configurations.
+**Build Automation**
 
-* We compile our design with a UVM testbench to run dynamic (simulation-based) verification
-* We compile our design with different testbenches to run formal verification
-* We likely use slightly different subset when targeting synthesis
+Orchestrate complex multi-step build processes with intelligent caching and
+dependency tracking.
 
-In addition, we also need to be flexible when it comes to tooling. Over time, we'll likely
-use different tools from different providers, and want our projects to adapt as easily as 
-possible to a change of tool. It's also likely that we will either want to add new tools
-to our environment over time, or adapt our environment to take advantage of new 
-productivity-enhancing tool features.
+Core Concepts
+=============
 
-DV Flow provides build-flow management features focused on silicon engineering. 
-There are three aspects to the project:
+DV Flow provides workflow management through three key aspects:
 
 * **Flow Specification** - Processing steps for a given project are captured in a hierarchy
   of YAML files. The flow-specification schema is designed to be tool-independent, such 
   that multiple tools can be implemented that comprehend a flow specification.
 * **Task Library** - Processing steps are implemented as `tasks`. Libraries of common tasks
-  are defined to cover common cases, such as creating a simulation image. External libraries
-  of tasks are supported, such that tools can bundle a task library along with the tool installation.
+  are defined to cover common cases. External libraries of tasks are supported, such that 
+  tools can bundle a task library along with the tool installation.
 * **Tools** - The Python implementation of DV Flow Manager is one example of a tool. Other tools
   include development and visualization support in VSCode.
-
-
-
 
 
 
