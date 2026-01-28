@@ -35,50 +35,54 @@
             
   <section id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h1>
-<p>Many software languages have co-evolved with a build system. For example, C/C++
-has Make and CMake. Java has ANT, Maven, and Gradle. All of these build systems
-provide features that cater to specific ways that a given language is processed,
-and provide built-in notions to make setting up simple cases as easy as possible.</p>
-<p>One simple example is Make and a single-file C program. Take the code below:</p>
-<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello, world!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>Make provides enough built-in features that are C/C++-specific that we can create
-an executable from this source file (assume it’s named hello.c) simply by running:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>hello
-</pre></div>
-</div>
-<p>Make knows about C files, it knows about the existance of a C compiler, and it knows
-that an executable can be created from a C file of the same name.</p>
-<section id="meanwhile-in-silicon-engineering-land">
-<h2>Meanwhile, in Silicon Engineering Land…<a class="headerlink" href="#meanwhile-in-silicon-engineering-land" title="Link to this heading">¶</a></h2>
-<p>Much like software languages, the languages, tools, and flows used in silicon engineering
-have their own unique characteristics. For example, in a silicon-design environment, many
-flows are run over the same source files – possibly with different configurations.</p>
+<p>DV Flow is a framework for orchestrating data-driven, parameterizable workflows.
+Tasks are connected by dataflow, enabling composable and reusable workflow
+definitions across many domains.</p>
+<section id="why-dv-flow">
+<h2>Why DV Flow?<a class="headerlink" href="#why-dv-flow" title="Link to this heading">¶</a></h2>
+<p>Many workflow systems are tightly coupled to specific domains or tools. DV Flow
+takes a different approach: workflows are specified declaratively in YAML, with
+tasks connected by dataflow. This enables:</p>
 <ul class="simple">
-<li><p>We compile our design with a UVM testbench to run dynamic (simulation-based) verification</p></li>
-<li><p>We compile our design with different testbenches to run formal verification</p></li>
-<li><p>We likely use slightly different subset when targeting synthesis</p></li>
+<li><p><strong>Data-Driven Execution</strong>: Tasks receive data from their dependencies, decoupling
+operations from data providers</p></li>
+<li><p><strong>Parameterization</strong>: Workflows can be specialized through parameters, enabling
+reuse across different configurations</p></li>
+<li><p><strong>Composability</strong>: Tasks and packages support inheritance and extension</p></li>
 </ul>
-<p>In addition, we also need to be flexible when it comes to tooling. Over time, we’ll likely
-use different tools from different providers, and want our projects to adapt as easily as
-possible to a change of tool. It’s also likely that we will either want to add new tools
-to our environment over time, or adapt our environment to take advantage of new
-productivity-enhancing tool features.</p>
-<p>DV Flow provides build-flow management features focused on silicon engineering.
-There are three aspects to the project:</p>
+</section>
+<section id="use-cases">
+<h2>Use Cases<a class="headerlink" href="#use-cases" title="Link to this heading">¶</a></h2>
+<p><strong>Silicon Design &amp; Verification</strong></p>
+<p>Originally designed for silicon engineering, DV Flow excels at hardware workflows
+where the same source files are processed by multiple tools with different configurations:</p>
+<ul class="simple">
+<li><p>Compile designs with UVM testbenches for simulation-based verification</p></li>
+<li><p>Run formal verification with different testbench configurations</p></li>
+<li><p>Target synthesis with specific subsets of the design</p></li>
+</ul>
+<p><strong>Agentic AI Workflows</strong></p>
+<p>DV Flow enables agentic workflows by treating prompts, context, and tools as
+reusable tasks:</p>
+<ul class="simple">
+<li><p>Encapsulate prompts and context as parameterizable tasks</p></li>
+<li><p>Chain agentic and non-agentic operations in the same workflow</p></li>
+<li><p>Run sub-workflows composed of multiple operations</p></li>
+</ul>
+<p><strong>Build Automation</strong></p>
+<p>Orchestrate complex multi-step build processes with intelligent caching and
+dependency tracking.</p>
+</section>
+<section id="core-concepts">
+<h2>Core Concepts<a class="headerlink" href="#core-concepts" title="Link to this heading">¶</a></h2>
+<p>DV Flow provides workflow management through three key aspects:</p>
 <ul class="simple">
 <li><p><strong>Flow Specification</strong> - Processing steps for a given project are captured in a hierarchy
 of YAML files. The flow-specification schema is designed to be tool-independent, such
 that multiple tools can be implemented that comprehend a flow specification.</p></li>
 <li><p><strong>Task Library</strong> - Processing steps are implemented as <cite>tasks</cite>. Libraries of common tasks
-are defined to cover common cases, such as creating a simulation image. External libraries
-of tasks are supported, such that tools can bundle a task library along with the tool installation.</p></li>
+are defined to cover common cases. External libraries of tasks are supported, such that
+tools can bundle a task library along with the tool installation.</p></li>
 <li><p><strong>Tools</strong> - The Python implementation of DV Flow Manager is one example of a tool. Other tools
 include development and visualization support in VSCode.</p></li>
 </ul>

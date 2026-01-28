@@ -34,214 +34,213 @@
             
   <section id="flow-spec-reference">
 <h1>Flow-Spec Reference<a class="headerlink" href="#flow-spec-reference" title="Link to this heading">¶</a></h1>
-<section id="file-root-elements">
-<h2>File Root Elements<a class="headerlink" href="#file-root-elements" title="Link to this heading">¶</a></h2>
-<p>Each <cite>flow.yaml</cite> file either defines a package or a package fragment.
-Each package is defined by the content in its root <cite>flow.yaml</cite> file
-and that in any <cite>fragment</cite> files that are specified in the root
-package file or its fragments.</p>
+<section id="conventions">
+<h2>Conventions<a class="headerlink" href="#conventions" title="Link to this heading">¶</a></h2>
+<p>The reference documentation uses a few conventions when specifying the
+capabilities of various aspects of the specification:</p>
+<ul class="simple">
+<li><p><strong>refstring</strong> - A string where parameter and expression references (ie ${{ … }})
+are expanded.</p></li>
+<li><p><strong>string</strong> - A literal string</p></li>
+</ul>
+</section>
+<section id="packages">
+<h2>Packages<a class="headerlink" href="#packages" title="Link to this heading">¶</a></h2>
+<p>A package file defines content under a <cite>package</cite> root element. The <cite>name</cite> element
+is required. Other elements are optional.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Minimal package definition</span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">package</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">proj1</span>
-
-<span class="w">    </span><span class="c1"># ...</span>
-
-<span class="w">    </span><span class="nt">fragments</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src/rtl/flow.yaml</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src/verif</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_package</span>
 </pre></div>
 </div>
-<p>Each package fragment element specifies either a directory or a file.
-If a file is specified, then that file is loaded. It is expected that the
-content will be a DV-Flow package fragment. If a directory is specified,
-then a top-down search is performed for <cite>flow.dv</cite> files in the subdirectory
-tree.</p>
-<p>The structure of a package fragment file is nearly identical to a package
-definition. For example:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">fragment</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">tasks</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rtl</span>
-<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">std.FileSet</span>
-<span class="w">      </span><span class="nt">params</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">include</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*.sv&quot;</span>
-</pre></div>
 </div>
-<p>Remember that all fragments referenced by a given package contribute to
-the same package namespace. It would be illegal for another flow file
-to also define a task named <cite>rtl</cite>.</p>
-<section id="packagedef">
-<span id="packagedef"></span><h3>PackageDef<a class="headerlink" href="#packagedef" title="Link to this heading">¶</a></h3>
+<p>An outline of the package schema is shown below. Please see the following sections
+for more information about key items:</p>
+<ul class="simple">
+<li><p>Datasets</p></li>
+<li><p>Tasks</p></li>
+</ul>
 <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Schema:</p></th>
+<th class="head"><p>#/defs/PackageDef</p></th>
+<th class="head"></th>
+</tr>
+<tr class="row-even"><th class="head"><p>Item</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p>type</p></td>
-<td colspan="4"><p><em>object</em></p></td>
+<tr class="row-odd"><td><p>name</p></td>
+<td><p>string</p></td>
+<td><p>Name of the package</p></td>
 </tr>
-<tr class="row-even"><td colspan="5"><p>properties</p></td>
+<tr class="row-even"><td><p>desc</p></td>
+<td><p>string</p></td>
+<td><p>Short description of the package</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="3"><ul class="simple">
-<li><p><strong>name</strong></p></li>
-</ul>
-</td>
-<td colspan="4"><p><em>Name</em></p></td>
+<tr class="row-odd"><td><p>doc</p></td>
+<td><p>string</p></td>
+<td><p>Documentation of the package content</p></td>
 </tr>
-<tr class="row-even"><td colspan="4"><p>Name of the package</p></td>
+<tr class="row-even"><td><p>uses</p></td>
+<td><p>string</p></td>
+<td><p>Name of the base package</p></td>
 </tr>
-<tr class="row-odd"><td><p>type</p></td>
-<td colspan="3"><p><em>string</em></p></td>
+<tr class="row-odd"><td><p>with</p></td>
+<td><p>list[refstring | ParamDef]</p></td>
+<td><p>Package parameters</p></td>
 </tr>
-<tr class="row-even"><td rowspan="3"><ul class="simple">
-<li><p>type</p></li>
-</ul>
-</td>
-<td colspan="4"><p><em>Type</em></p></td>
+<tr class="row-even"><td><p>imports</p></td>
+<td><p>list[refstring]</p></td>
+<td><p>External packages to load</p></td>
 </tr>
-<tr class="row-odd"><td><p>type</p></td>
-<td colspan="3"><p><em>array</em></p></td>
+<tr class="row-odd"><td><p>tasks</p></td>
+<td><p>list[TaskDef]</p></td>
+<td><p>Task definitions</p></td>
 </tr>
-<tr class="row-even"><td><p>items</p></td>
-<td colspan="3"><p><a class="reference internal" href="#packagespec"><span class="std std-ref">PackageSpec</span></a></p></td>
+<tr class="row-even"><td><p>datasets</p></td>
+<td><p>list[DatasetDef]</p></td>
+<td><p>Dataset definitions</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="4"><ul class="simple">
-<li><p>tasks</p></li>
-</ul>
-</td>
-<td colspan="4"><p><em>Tasks</em></p></td>
-</tr>
-<tr class="row-even"><td colspan="4"><p>List of tasks defined in the package</p></td>
-</tr>
-<tr class="row-odd"><td><p>type</p></td>
-<td colspan="3"><p><em>array</em></p></td>
-</tr>
-<tr class="row-even"><td><p>items</p></td>
-<td colspan="3"><p><a class="reference internal" href="#taskdef"><span class="std std-ref">TaskDef</span></a></p></td>
-</tr>
-<tr class="row-odd"><td rowspan="5"><ul class="simple">
-<li><p>imports</p></li>
-</ul>
-</td>
-<td colspan="4"><p><em>Imports</em></p></td>
-</tr>
-<tr class="row-even"><td colspan="4"><p>List of packages to import</p></td>
-</tr>
-<tr class="row-odd"><td><p>type</p></td>
-<td colspan="3"><p><em>array</em></p></td>
-</tr>
-<tr class="row-even"><td rowspan="2"><p>items</p></td>
-<td rowspan="2"><p>anyOf</p></td>
-<td><p>type</p></td>
-<td><p><em>string</em></p></td>
-</tr>
-<tr class="row-odd"><td colspan="2"><p><a class="reference internal" href="#packageimportspec"><span class="std std-ref">PackageImportSpec</span></a></p></td>
-</tr>
-<tr class="row-even"><td rowspan="4"><ul class="simple">
-<li><p>overrides</p></li>
-</ul>
-</td>
-<td colspan="4"><p><em>Overrides</em></p></td>
-</tr>
-<tr class="row-odd"><td colspan="4"><p>Overrides for packages and parameters</p></td>
-</tr>
-<tr class="row-even"><td><p>type</p></td>
-<td colspan="3"><p><em>object</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>additionalProperties</p></td>
-<td><p>type</p></td>
-<td colspan="2"><p><em>string</em></p></td>
-</tr>
-<tr class="row-even"><td rowspan="4"><ul class="simple">
-<li><p>fragments</p></li>
-</ul>
-</td>
-<td colspan="4"><p><em>Fragments</em></p></td>
-</tr>
-<tr class="row-odd"><td colspan="4"><p>List of fragments to include</p></td>
-</tr>
-<tr class="row-even"><td><p>type</p></td>
-<td colspan="3"><p><em>array</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>items</p></td>
-<td><p>type</p></td>
-<td colspan="2"><p><em>string</em></p></td>
-</tr>
-<tr class="row-even"><td rowspan="3"><ul class="simple">
-<li><p>types</p></li>
-</ul>
-</td>
-<td colspan="4"><p><em>Types</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>type</p></td>
-<td colspan="3"><p><em>array</em></p></td>
-</tr>
-<tr class="row-even"><td><p>items</p></td>
-<td colspan="3"><p><a class="reference internal" href="#typedef"><span class="std std-ref">TypeDef</span></a></p></td>
-</tr>
-<tr class="row-odd"><td rowspan="4"><ul class="simple">
-<li><p>uses</p></li>
-</ul>
-</td>
-<td colspan="4"><p><em>Uses</em></p></td>
-</tr>
-<tr class="row-even"><td colspan="4"><p>Name of the package to use as a base</p></td>
-</tr>
-<tr class="row-odd"><td><p>type</p></td>
-<td colspan="3"><p><em>string</em></p></td>
-</tr>
-<tr class="row-even"><td><p>default</p></td>
-<td colspan="3"><p>null</p></td>
-</tr>
-<tr class="row-odd"><td rowspan="7"><ul class="simple">
-<li><p>with</p></li>
-</ul>
-</td>
-<td colspan="4"><p><em>With</em></p></td>
-</tr>
-<tr class="row-even"><td colspan="4"><p>Package parameters</p></td>
-</tr>
-<tr class="row-odd"><td><p>type</p></td>
-<td colspan="3"><p><em>object</em></p></td>
-</tr>
-<tr class="row-even"><td rowspan="4"><p>additionalProperties</p></td>
-<td rowspan="4"><p>anyOf</p></td>
-<td><p>type</p></td>
-<td><p><em>string</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>type</p></td>
-<td><p><em>array</em></p></td>
-</tr>
-<tr class="row-even"><td colspan="2"><p>items</p></td>
-</tr>
-<tr class="row-odd"><td colspan="2"><p><a class="reference internal" href="#paramdef"><span class="std std-ref">ParamDef</span></a></p></td>
-</tr>
-<tr class="row-even"><td rowspan="4"><ul class="simple">
-<li><p>configs</p></li>
-</ul>
-</td>
-<td colspan="4"><p><em>Configs</em></p></td>
-</tr>
-<tr class="row-odd"><td colspan="4"><p>List of package configurations</p></td>
-</tr>
-<tr class="row-even"><td><p>type</p></td>
-<td colspan="3"><p><em>array</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>items</p></td>
-<td colspan="3"><p><span class="xref std std-ref">#/defs/ConfigDef</span></p></td>
-</tr>
-<tr class="row-even"><td rowspan="2"><ul class="simple">
-<li><p>srcinfo</p></li>
-</ul>
-</td>
-<td><p>default</p></td>
-<td colspan="3"><p>null</p></td>
-</tr>
-<tr class="row-odd"><td colspan="4"><p><span class="xref std std-ref">#/defs/SrcInfo</span></p></td>
+<tr class="row-odd"><td><p>fragments</p></td>
+<td><p>list[refstring]</p></td>
+<td><p>Package fragment files</p></td>
 </tr>
 </tbody>
 </table>
+<p>A package file defines content under a <cite>package</cite> root element. The <cite>name</cite> element
+is required. Other elements are optional.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Minimal package definition</span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">package</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_package</span>
+</pre></div>
+</div>
+</div>
+<section id="uses">
+<h3>Uses<a class="headerlink" href="#uses" title="Link to this heading">¶</a></h3>
+<p>A package inherits from a base package via the <cite>uses</cite> element. All elements from the base
+package become elements of the inheriting package.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Package inheritance</span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_base_pkg.yaml</span>
+<span class="nt">package</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_base_pkg</span>
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_t1</span>
+
+<span class="c1"># my_ext_pkg.yaml</span>
+<span class="nt">package</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_ext_pkg</span>
+<span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_base_pkg</span>
+<span class="w">  </span><span class="nt">imports</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_base_pkg.yml</span>
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_t2</span>
+</pre></div>
+</div>
+</div>
+<p>In the example above, <cite>my_ext_pkg</cite> contains two tasks: <cite>my_t1</cite> and <cite>my_t2</cite>.</p>
+</section>
+<section id="with">
+<h3>With<a class="headerlink" href="#with" title="Link to this heading">¶</a></h3>
+<p>A package declares and configures package-local parameters using the <cite>with</cite> section.</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Package parameter declaration</span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">package</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_package</span>
+<span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">p1</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">abc</span>
+</pre></div>
+</div>
+</div>
+<p>For more information about declaring and using parameters, see the <cite>Parameters</cite> section.</p>
+</section>
+<section id="imports">
+<h3>Imports<a class="headerlink" href="#imports" title="Link to this heading">¶</a></h3>
+<p>Packages are explicitly loaded from a file using the <cite>imports</cite> section. Each entry in this
+section is a path to a package file. The path may be absolute or relative. Relative paths
+are resolved:</p>
+<ul class="simple">
+<li><p>Relative to the directory containing the current file</p></li>
+<li><p>Relative to the directory containing the root package file</p></li>
+</ul>
+<p>Variable references are supported.</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Package import with an environment-rooted path</span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">package</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_package</span>
+<span class="w">  </span><span class="nt">imports</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ env.ANCHOR_my_uvc }}/flow.yaml</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">Package import with a relative path</span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">package</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_package</span>
+<span class="w">  </span><span class="nt">imports</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">import/my_ip/flow.yaml</span>
+</pre></div>
+</div>
+</div>
 </section>
 </section>
+<section id="package-fragments">
+<h2>Package Fragments<a class="headerlink" href="#package-fragments" title="Link to this heading">¶</a></h2>
+<p>Package fragment files specify additional content. Most package elements can be
+declared in a fragment, with the exception of the package <cite>name</cite>,
+<cite>uses</cite> (base package), and <cite>with</cite> (package parameters).</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Package fragment</span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">fragment</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">imports</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../my_file.yaml</span>
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">T1</span>
+<span class="w">    </span><span class="c1"># ...</span>
+</pre></div>
+</div>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Schema:</p></th>
+<th class="head"><p>#/defs/FragmentDef</p></th>
+<th class="head"></th>
+</tr>
+<tr class="row-even"><th class="head"><p>Item</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>imports</p></td>
+<td><p>list[refstring]</p></td>
+<td><p>External packages to load</p></td>
+</tr>
+<tr class="row-even"><td><p>tasks</p></td>
+<td><p>list[TaskDef]</p></td>
+<td><p>Task definitions</p></td>
+</tr>
+<tr class="row-odd"><td><p>datasets</p></td>
+<td><p>list[DatasetDef]</p></td>
+<td><p>Dataset definitions</p></td>
+</tr>
+<tr class="row-even"><td><p>fragments</p></td>
+<td><p>list[string]</p></td>
+<td><p>Package fragment files</p></td>
+</tr>
+</tbody>
+</table>
 <section id="task-definition">
-<h2>Task Definition<a class="headerlink" href="#task-definition" title="Link to this heading">¶</a></h2>
+<h3>Task Definition<a class="headerlink" href="#task-definition" title="Link to this heading">¶</a></h3>
 <section id="rundire">
-<span id="rundire"></span><h3>RundirE<a class="headerlink" href="#rundire" title="Link to this heading">¶</a></h3>
+<span id="rundire"></span><h4>RundirE<a class="headerlink" href="#rundire" title="Link to this heading">¶</a></h4>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p>type</p></td>
@@ -253,53 +252,8 @@ to also define a task named <cite>rtl</cite>.</p>
 </tbody>
 </table>
 </section>
-<section id="packagespec">
-<span id="packagespec"></span><h3>PackageSpec<a class="headerlink" href="#packagespec" title="Link to this heading">¶</a></h3>
-<table class="docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p>type</p></td>
-<td colspan="2"><p><em>object</em></p></td>
-</tr>
-<tr class="row-even"><td colspan="3"><p>properties</p></td>
-</tr>
-<tr class="row-odd"><td rowspan="2"><ul class="simple">
-<li><p><strong>name</strong></p></li>
-</ul>
-</td>
-<td colspan="2"><p><em>Name</em></p></td>
-</tr>
-<tr class="row-even"><td><p>type</p></td>
-<td><p><em>string</em></p></td>
-</tr>
-<tr class="row-odd"><td rowspan="3"><ul class="simple">
-<li><p>params</p></li>
-</ul>
-</td>
-<td colspan="2"><p><em>Params</em></p></td>
-</tr>
-<tr class="row-even"><td><p>type</p></td>
-<td><p><em>object</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>additionalProperties</p></td>
-<td><p>True</p></td>
-</tr>
-<tr class="row-even"><td rowspan="3"><ul class="simple">
-<li><p>_fullname</p></li>
-</ul>
-</td>
-<td colspan="2"><p><em>Fullname</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>type</p></td>
-<td><p><em>string</em></p></td>
-</tr>
-<tr class="row-even"><td><p>default</p></td>
-<td><p>null</p></td>
-</tr>
-</tbody>
-</table>
-</section>
 <section id="taskdef">
-<span id="taskdef"></span><h3>TaskDef<a class="headerlink" href="#taskdef" title="Link to this heading">¶</a></h3>
+<span id="taskdef"></span><h4>TaskDef<a class="headerlink" href="#taskdef" title="Link to this heading">¶</a></h4>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td colspan="5"><p>Holds definition information (ie the YAML view) for a task</p></td>
@@ -328,12 +282,12 @@ to also define a task named <cite>rtl</cite>.</p>
 <td colspan="2"><p><em>null</em></p></td>
 </tr>
 <tr class="row-odd"><td rowspan="5"><ul class="simple">
-<li><p>override</p></li>
+<li><p>root</p></li>
 </ul>
 </td>
-<td colspan="4"><p><em>Overide Name</em></p></td>
+<td colspan="4"><p><em>Root Task Name</em></p></td>
 </tr>
-<tr class="row-even"><td colspan="4"><p>The name of the task to override</p></td>
+<tr class="row-even"><td colspan="4"><p>The name of the task (marked as root scope)</p></td>
 </tr>
 <tr class="row-odd"><td><p>default</p></td>
 <td colspan="3"><p>null</p></td>
@@ -345,19 +299,98 @@ to also define a task named <cite>rtl</cite>.</p>
 <tr class="row-odd"><td><p>type</p></td>
 <td colspan="2"><p><em>null</em></p></td>
 </tr>
-<tr class="row-even"><td rowspan="4"><ul class="simple">
+<tr class="row-even"><td rowspan="5"><ul class="simple">
+<li><p>export</p></li>
+</ul>
+</td>
+<td colspan="4"><p><em>Export Task Name</em></p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>The name of the task (marked as export scope)</p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
+<td colspan="3"><p>null</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p>anyOf</p></td>
+<td><p>type</p></td>
+<td colspan="2"><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td colspan="2"><p><em>null</em></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="5"><ul class="simple">
+<li><p>local</p></li>
+</ul>
+</td>
+<td colspan="4"><p><em>Local Task Name</em></p></td>
+</tr>
+<tr class="row-even"><td colspan="4"><p>The name of the task (marked as local scope)</p></td>
+</tr>
+<tr class="row-odd"><td><p>default</p></td>
+<td colspan="3"><p>null</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p>anyOf</p></td>
+<td><p>type</p></td>
+<td colspan="2"><p><em>string</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="2"><p><em>null</em></p></td>
+</tr>
+<tr class="row-even"><td rowspan="5"><ul class="simple">
+<li><p>override</p></li>
+</ul>
+</td>
+<td colspan="4"><p><em>Overide Name</em></p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>The name of the task to override</p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
+<td colspan="3"><p>null</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p>anyOf</p></td>
+<td><p>type</p></td>
+<td colspan="2"><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td colspan="2"><p><em>null</em></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><ul class="simple">
 <li><p>uses</p></li>
 </ul>
 </td>
 <td colspan="4"><p><em>Base type</em></p></td>
 </tr>
-<tr class="row-odd"><td colspan="4"><p>Task from which this task is derived</p></td>
+<tr class="row-even"><td colspan="4"><p>Task from which this task is derived</p></td>
 </tr>
-<tr class="row-even"><td><p>type</p></td>
+<tr class="row-odd"><td><p>type</p></td>
 <td colspan="3"><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
+<td colspan="3"><p>null</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="7"><ul class="simple">
+<li><p>scope</p></li>
+</ul>
+</td>
+<td colspan="4"><p><em>Task visibility scope</em></p></td>
+</tr>
+<tr class="row-even"><td colspan="4"><p>Visibility scope: ‘root’ (executable), ‘export’ (visible outside package), ‘local’ (fragment-only)</p></td>
 </tr>
 <tr class="row-odd"><td><p>default</p></td>
 <td colspan="3"><p>null</p></td>
+</tr>
+<tr class="row-even"><td rowspan="4"><p>anyOf</p></td>
+<td><p>type</p></td>
+<td colspan="2"><p><em>string</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="2"><p><em>array</em></p></td>
+</tr>
+<tr class="row-even"><td><p>items</p></td>
+<td><p>type</p></td>
+<td><p><em>string</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="2"><p><em>null</em></p></td>
 </tr>
 <tr class="row-even"><td rowspan="4"><ul class="simple">
 <li><p>body</p></li>
@@ -500,7 +533,7 @@ to also define a task named <cite>rtl</cite>.</p>
 <td><p>type</p></td>
 <td colspan="2"><p><em>string</em></p></td>
 </tr>
-<tr class="row-odd"><td rowspan="8"><ul class="simple">
+<tr class="row-odd"><td rowspan="10"><ul class="simple">
 <li><p>with</p></li>
 </ul>
 </td>
@@ -511,8 +544,8 @@ to also define a task named <cite>rtl</cite>.</p>
 <tr class="row-odd"><td><p>type</p></td>
 <td colspan="3"><p><em>object</em></p></td>
 </tr>
-<tr class="row-even"><td rowspan="5"><p>additionalProperties</p></td>
-<td rowspan="5"><p>anyOf</p></td>
+<tr class="row-even"><td rowspan="7"><p>additionalProperties</p></td>
+<td rowspan="7"><p>anyOf</p></td>
 <td><p>type</p></td>
 <td><p><em>string</em></p></td>
 </tr>
@@ -522,9 +555,16 @@ to also define a task named <cite>rtl</cite>.</p>
 <tr class="row-even"><td colspan="2"><p>items</p></td>
 </tr>
 <tr class="row-odd"><td><p>type</p></td>
+<td><p><em>integer</em></p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
 <td><p><em>boolean</em></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p><a class="reference internal" href="#paramdef"><span class="std std-ref">ParamDef</span></a></p></td>
+<tr class="row-odd"><td><p>type</p></td>
+<td><p><em>object</em></p></td>
+</tr>
+<tr class="row-even"><td><p>additionalProperties</p></td>
+<td><p>True</p></td>
 </tr>
 <tr class="row-odd"><td rowspan="3"><ul class="simple">
 <li><p>rundir</p></li>
@@ -581,20 +621,77 @@ to also define a task named <cite>rtl</cite>.</p>
 <tr class="row-odd"><td><p>type</p></td>
 <td colspan="2"><p><em>null</em></p></td>
 </tr>
-<tr class="row-even"><td rowspan="2"><ul class="simple">
-<li><p>srcinfo</p></li>
+<tr class="row-even"><td rowspan="6"><ul class="simple">
+<li><p>uptodate</p></li>
 </ul>
 </td>
-<td><p>default</p></td>
+<td colspan="4"><p><em>Uptodate</em></p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>Up-to-date check: false=always run, string=Python method, None=use default check</p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
 <td colspan="3"><p>null</p></td>
 </tr>
-<tr class="row-odd"><td colspan="4"><p><span class="xref std std-ref">#/defs/SrcInfo</span></p></td>
+<tr class="row-odd"><td rowspan="3"><p>anyOf</p></td>
+<td><p>type</p></td>
+<td colspan="2"><p><em>boolean</em></p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td colspan="2"><p><em>string</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="2"><p><em>null</em></p></td>
+</tr>
+<tr class="row-even"><td rowspan="6"><ul class="simple">
+<li><p>cache</p></li>
+</ul>
+</td>
+<td colspan="4"><p><em>Cache</em></p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>Cache configuration. True=enabled with defaults, False=disabled, CacheDef=custom config</p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
+<td colspan="3"><p>null</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><p>anyOf</p></td>
+<td colspan="3"><p><span class="xref std std-ref">#/defs/CacheDef</span></p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td colspan="2"><p><em>boolean</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="2"><p><em>null</em></p></td>
+</tr>
+<tr class="row-even"><td rowspan="6"><ul class="simple">
+<li><p>tags</p></li>
+</ul>
+</td>
+<td colspan="4"><p><em>Tags</em></p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>Tags as type references with optional parameter overrides</p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td colspan="3"><p><em>array</em></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><p>items</p></td>
+<td rowspan="3"><p>anyOf</p></td>
+<td><p>type</p></td>
+<td><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
+<td><p><em>object</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>additionalProperties</p></td>
+<td><p>True</p></td>
+</tr>
+<tr class="row-even"><td><p>additionalProperties</p></td>
+<td colspan="4"><p>False</p></td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="packageimportspec">
-<span id="packageimportspec"></span><h3>PackageImportSpec<a class="headerlink" href="#packageimportspec" title="Link to this heading">¶</a></h3>
+<span id="packageimportspec"></span><h4>PackageImportSpec<a class="headerlink" href="#packageimportspec" title="Link to this heading">¶</a></h4>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p>type</p></td>
@@ -602,23 +699,13 @@ to also define a task named <cite>rtl</cite>.</p>
 </tr>
 <tr class="row-even"><td colspan="3"><p>properties</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="3"><ul class="simple">
+<tr class="row-odd"><td rowspan="4"><ul class="simple">
 <li><p>from</p></li>
 </ul>
 </td>
 <td colspan="2"><p><em>From</em></p></td>
 </tr>
-<tr class="row-even"><td><p>type</p></td>
-<td><p><em>string</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>default</p></td>
-<td><p>null</p></td>
-</tr>
-<tr class="row-even"><td rowspan="3"><ul class="simple">
-<li><p>as</p></li>
-</ul>
-</td>
-<td colspan="2"><p><em>As</em></p></td>
+<tr class="row-even"><td colspan="2"><p>Package identifier or file path to import</p></td>
 </tr>
 <tr class="row-odd"><td><p>type</p></td>
 <td><p><em>string</em></p></td>
@@ -626,11 +713,53 @@ to also define a task named <cite>rtl</cite>.</p>
 <tr class="row-even"><td><p>default</p></td>
 <td><p>null</p></td>
 </tr>
+<tr class="row-odd"><td rowspan="4"><ul class="simple">
+<li><p>as</p></li>
+</ul>
+</td>
+<td colspan="2"><p><em>As</em></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>Alias name for the imported package</p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
+<td><p>null</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><ul class="simple">
+<li><p>config</p></li>
+</ul>
+</td>
+<td colspan="2"><p><em>Config</em></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>Configuration name to apply when importing</p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
+<td><p>null</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><ul class="simple">
+<li><p>with</p></li>
+</ul>
+</td>
+<td colspan="2"><p><em>With</em></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>Parameter overrides to apply to the imported package</p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td><p><em>object</em></p></td>
+</tr>
+<tr class="row-even"><td><p>additionalProperties</p></td>
+<td><p>True</p></td>
+</tr>
 </tbody>
 </table>
 </section>
 <section id="typedef">
-<span id="typedef"></span><h3>TypeDef<a class="headerlink" href="#typedef" title="Link to this heading">¶</a></h3>
+<span id="typedef"></span><h4>TypeDef<a class="headerlink" href="#typedef" title="Link to this heading">¶</a></h4>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p>type</p></td>
@@ -638,20 +767,24 @@ to also define a task named <cite>rtl</cite>.</p>
 </tr>
 <tr class="row-even"><td colspan="5"><p>properties</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="2"><ul class="simple">
+<tr class="row-odd"><td rowspan="3"><ul class="simple">
 <li><p><strong>name</strong></p></li>
 </ul>
 </td>
 <td colspan="4"><p><em>Name</em></p></td>
 </tr>
-<tr class="row-even"><td><p>type</p></td>
+<tr class="row-even"><td colspan="4"><p>Name of the data type</p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
 <td colspan="3"><p><em>string</em></p></td>
 </tr>
-<tr class="row-odd"><td rowspan="3"><ul class="simple">
+<tr class="row-even"><td rowspan="4"><ul class="simple">
 <li><p>uses</p></li>
 </ul>
 </td>
 <td colspan="4"><p><em>Uses</em></p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>Base type to inherit from. Supports type extension/specialization</p></td>
 </tr>
 <tr class="row-even"><td><p>type</p></td>
 <td colspan="3"><p><em>string</em></p></td>
@@ -659,23 +792,27 @@ to also define a task named <cite>rtl</cite>.</p>
 <tr class="row-odd"><td><p>default</p></td>
 <td colspan="3"><p>null</p></td>
 </tr>
-<tr class="row-even"><td rowspan="3"><ul class="simple">
+<tr class="row-even"><td rowspan="4"><ul class="simple">
 <li><p>doc</p></li>
 </ul>
 </td>
 <td colspan="4"><p><em>Doc</em></p></td>
 </tr>
-<tr class="row-odd"><td><p>type</p></td>
+<tr class="row-odd"><td colspan="4"><p>Documentation for this type definition</p></td>
+</tr>
+<tr class="row-even"><td><p>type</p></td>
 <td colspan="3"><p><em>string</em></p></td>
 </tr>
-<tr class="row-even"><td><p>default</p></td>
+<tr class="row-odd"><td><p>default</p></td>
 <td colspan="3"><p>null</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="4"><ul class="simple">
+<tr class="row-even"><td rowspan="5"><ul class="simple">
 <li><p>with</p></li>
 </ul>
 </td>
 <td colspan="4"><p><em>With</em></p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>Parameters for this type. Can be simple values or full parameter definitions</p></td>
 </tr>
 <tr class="row-even"><td><p>type</p></td>
 <td colspan="3"><p><em>object</em></p></td>
@@ -687,20 +824,33 @@ to also define a task named <cite>rtl</cite>.</p>
 </tr>
 <tr class="row-even"><td colspan="2"><p><a class="reference internal" href="#paramdef"><span class="std std-ref">ParamDef</span></a></p></td>
 </tr>
-<tr class="row-odd"><td rowspan="2"><ul class="simple">
-<li><p>srcinfo</p></li>
+<tr class="row-odd"><td rowspan="6"><ul class="simple">
+<li><p>tags</p></li>
 </ul>
 </td>
-<td><p>default</p></td>
-<td colspan="3"><p>null</p></td>
+<td colspan="4"><p><em>Tags</em></p></td>
 </tr>
-<tr class="row-even"><td colspan="4"><p><span class="xref std std-ref">#/defs/SrcInfo</span></p></td>
+<tr class="row-even"><td colspan="4"><p>Tags as type references with optional parameter overrides</p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="3"><p><em>array</em></p></td>
+</tr>
+<tr class="row-even"><td rowspan="3"><p>items</p></td>
+<td rowspan="3"><p>anyOf</p></td>
+<td><p>type</p></td>
+<td><p><em>string</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td><p><em>object</em></p></td>
+</tr>
+<tr class="row-even"><td><p>additionalProperties</p></td>
+<td><p>True</p></td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="strategydef">
-<span id="strategydef"></span><h3>StrategyDef<a class="headerlink" href="#strategydef" title="Link to this heading">¶</a></h3>
+<span id="strategydef"></span><h4>StrategyDef<a class="headerlink" href="#strategydef" title="Link to this heading">¶</a></h4>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p>type</p></td>
@@ -708,27 +858,31 @@ to also define a task named <cite>rtl</cite>.</p>
 </tr>
 <tr class="row-even"><td colspan="5"><p>properties</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="4"><ul class="simple">
+<tr class="row-odd"><td rowspan="5"><ul class="simple">
 <li><p>chain</p></li>
 </ul>
 </td>
 <td colspan="4"><p><em>Chain</em></p></td>
 </tr>
-<tr class="row-even"><td><p>default</p></td>
+<tr class="row-even"><td colspan="4"><p>Enable chain strategy: run body tasks sequentially with each consuming output of previous task</p></td>
+</tr>
+<tr class="row-odd"><td><p>default</p></td>
 <td colspan="3"><p>null</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="2"><p>anyOf</p></td>
+<tr class="row-even"><td rowspan="2"><p>anyOf</p></td>
 <td><p>type</p></td>
 <td colspan="2"><p><em>boolean</em></p></td>
 </tr>
-<tr class="row-even"><td><p>type</p></td>
+<tr class="row-odd"><td><p>type</p></td>
 <td colspan="2"><p><em>null</em></p></td>
 </tr>
-<tr class="row-odd"><td rowspan="3"><ul class="simple">
+<tr class="row-even"><td rowspan="4"><ul class="simple">
 <li><p>generate</p></li>
 </ul>
 </td>
-<td><p>default</p></td>
+<td colspan="4"><p>Enable generate strategy: dynamically create tasks by running a shell command that outputs task definitions</p></td>
+</tr>
+<tr class="row-odd"><td><p>default</p></td>
 <td colspan="3"><p>null</p></td>
 </tr>
 <tr class="row-even"><td rowspan="2"><p>anyOf</p></td>
@@ -743,7 +897,7 @@ to also define a task named <cite>rtl</cite>.</p>
 </td>
 <td colspan="4"><p><em>Matrix</em></p></td>
 </tr>
-<tr class="row-odd"><td colspan="4"><p>Matrix of parameter values to explore</p></td>
+<tr class="row-odd"><td colspan="4"><p>Matrix of parameter values to explore. Creates one task instance per combination of values</p></td>
 </tr>
 <tr class="row-even"><td><p>default</p></td>
 <td colspan="3"><p>null</p></td>
@@ -761,11 +915,25 @@ to also define a task named <cite>rtl</cite>.</p>
 <tr class="row-even"><td><p>type</p></td>
 <td colspan="2"><p><em>null</em></p></td>
 </tr>
+<tr class="row-odd"><td rowspan="4"><ul class="simple">
+<li><p>body</p></li>
+</ul>
+</td>
+<td colspan="4"><p><em>Body</em></p></td>
+</tr>
+<tr class="row-even"><td colspan="4"><p>Body tasks for strategy execution. Used with chain and matrix strategies</p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="3"><p><em>array</em></p></td>
+</tr>
+<tr class="row-even"><td><p>items</p></td>
+<td colspan="3"><p><a class="reference internal" href="#taskdef"><span class="std std-ref">TaskDef</span></a></p></td>
+</tr>
 </tbody>
 </table>
 </section>
 <section id="listtype">
-<span id="listtype"></span><h3>ListType<a class="headerlink" href="#listtype" title="Link to this heading">¶</a></h3>
+<span id="listtype"></span><h4>ListType<a class="headerlink" href="#listtype" title="Link to this heading">¶</a></h4>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p>type</p></td>
@@ -787,7 +955,7 @@ to also define a task named <cite>rtl</cite>.</p>
 </table>
 </section>
 <section id="maptype">
-<span id="maptype"></span><h3>MapType<a class="headerlink" href="#maptype" title="Link to this heading">¶</a></h3>
+<span id="maptype"></span><h4>MapType<a class="headerlink" href="#maptype" title="Link to this heading">¶</a></h4>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p>type</p></td>
@@ -819,7 +987,7 @@ to also define a task named <cite>rtl</cite>.</p>
 </table>
 </section>
 <section id="complextype">
-<span id="complextype"></span><h3>ComplexType<a class="headerlink" href="#complextype" title="Link to this heading">¶</a></h3>
+<span id="complextype"></span><h4>ComplexType<a class="headerlink" href="#complextype" title="Link to this heading">¶</a></h4>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p>type</p></td>
@@ -857,7 +1025,7 @@ to also define a task named <cite>rtl</cite>.</p>
 </table>
 </section>
 <section id="paramdef">
-<span id="paramdef"></span><h3>ParamDef<a class="headerlink" href="#paramdef" title="Link to this heading">¶</a></h3>
+<span id="paramdef"></span><h4>ParamDef<a class="headerlink" href="#paramdef" title="Link to this heading">¶</a></h4>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p>type</p></td>
@@ -865,23 +1033,13 @@ to also define a task named <cite>rtl</cite>.</p>
 </tr>
 <tr class="row-even"><td colspan="4"><p>properties</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="3"><ul class="simple">
+<tr class="row-odd"><td rowspan="4"><ul class="simple">
 <li><p>doc</p></li>
 </ul>
 </td>
 <td colspan="3"><p><em>Doc</em></p></td>
 </tr>
-<tr class="row-even"><td><p>type</p></td>
-<td colspan="2"><p><em>string</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>default</p></td>
-<td colspan="2"><p>null</p></td>
-</tr>
-<tr class="row-even"><td rowspan="3"><ul class="simple">
-<li><p>desc</p></li>
-</ul>
-</td>
-<td colspan="3"><p><em>Desc</em></p></td>
+<tr class="row-even"><td colspan="3"><p>Full documentation for this parameter</p></td>
 </tr>
 <tr class="row-odd"><td><p>type</p></td>
 <td colspan="2"><p><em>string</em></p></td>
@@ -890,77 +1048,43 @@ to also define a task named <cite>rtl</cite>.</p>
 <td colspan="2"><p>null</p></td>
 </tr>
 <tr class="row-odd"><td rowspan="4"><ul class="simple">
+<li><p>desc</p></li>
+</ul>
+</td>
+<td colspan="3"><p><em>Desc</em></p></td>
+</tr>
+<tr class="row-even"><td colspan="3"><p>Short description of this parameter</p></td>
+</tr>
+<tr class="row-odd"><td><p>type</p></td>
+<td colspan="2"><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
+<td colspan="2"><p>null</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="5"><ul class="simple">
 <li><p>type</p></li>
 </ul>
 </td>
 <td colspan="3"><p><em>Type</em></p></td>
 </tr>
-<tr class="row-even"><td><p>default</p></td>
+<tr class="row-even"><td colspan="3"><p>Parameter type (e.g., ‘str’, ‘int’, ‘bool’, ‘list’, ‘map’, or a complex type definition)</p></td>
+</tr>
+<tr class="row-odd"><td><p>default</p></td>
 <td colspan="2"><p>null</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="2"><p>anyOf</p></td>
+<tr class="row-even"><td rowspan="2"><p>anyOf</p></td>
 <td><p>type</p></td>
 <td><p><em>string</em></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p><a class="reference internal" href="#complextype"><span class="std std-ref">ComplexType</span></a></p></td>
+<tr class="row-odd"><td colspan="2"><p><a class="reference internal" href="#complextype"><span class="std std-ref">ComplexType</span></a></p></td>
 </tr>
-<tr class="row-odd"><td rowspan="3"><ul class="simple">
+<tr class="row-even"><td rowspan="4"><ul class="simple">
 <li><p>value</p></li>
 </ul>
 </td>
 <td colspan="3"><p><em>Value</em></p></td>
 </tr>
-<tr class="row-even"><td><p>default</p></td>
-<td colspan="2"><p>null</p></td>
-</tr>
-<tr class="row-odd"><td><p>anyOf</p></td>
-<td><p>type</p></td>
-<td><p><em>null</em></p></td>
-</tr>
-<tr class="row-even"><td rowspan="3"><ul class="simple">
-<li><p>append</p></li>
-</ul>
-</td>
-<td colspan="3"><p><em>Append</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>default</p></td>
-<td colspan="2"><p>null</p></td>
-</tr>
-<tr class="row-even"><td><p>anyOf</p></td>
-<td><p>type</p></td>
-<td><p><em>null</em></p></td>
-</tr>
-<tr class="row-odd"><td rowspan="3"><ul class="simple">
-<li><p>prepend</p></li>
-</ul>
-</td>
-<td colspan="3"><p><em>Prepend</em></p></td>
-</tr>
-<tr class="row-even"><td><p>default</p></td>
-<td colspan="2"><p>null</p></td>
-</tr>
-<tr class="row-odd"><td><p>anyOf</p></td>
-<td><p>type</p></td>
-<td><p><em>null</em></p></td>
-</tr>
-<tr class="row-even"><td rowspan="3"><ul class="simple">
-<li><p>path-append</p></li>
-</ul>
-</td>
-<td colspan="3"><p><em>Path-Append</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>default</p></td>
-<td colspan="2"><p>null</p></td>
-</tr>
-<tr class="row-even"><td><p>anyOf</p></td>
-<td><p>type</p></td>
-<td><p><em>null</em></p></td>
-</tr>
-<tr class="row-odd"><td rowspan="3"><ul class="simple">
-<li><p>path-prepend</p></li>
-</ul>
-</td>
-<td colspan="3"><p><em>Path-Prepend</em></p></td>
+<tr class="row-odd"><td colspan="3"><p>Default value for this parameter</p></td>
 </tr>
 <tr class="row-even"><td><p>default</p></td>
 <td colspan="2"><p>null</p></td>
@@ -970,23 +1094,68 @@ to also define a task named <cite>rtl</cite>.</p>
 <td><p><em>null</em></p></td>
 </tr>
 <tr class="row-even"><td rowspan="4"><ul class="simple">
-<li><p>srcinfo</p></li>
+<li><p>append</p></li>
 </ul>
 </td>
-<td colspan="3"><p><em>Srcinfo</em></p></td>
+<td colspan="3"><p><em>Append</em></p></td>
 </tr>
-<tr class="row-odd"><td><p>default</p></td>
+<tr class="row-odd"><td colspan="3"><p>Value to append to list-type parameters</p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
 <td colspan="2"><p>null</p></td>
 </tr>
-<tr class="row-even"><td rowspan="2"><p>anyOf</p></td>
+<tr class="row-odd"><td><p>anyOf</p></td>
 <td><p>type</p></td>
-<td><p><em>string</em></p></td>
+<td><p><em>null</em></p></td>
 </tr>
-<tr class="row-odd"><td><p>type</p></td>
+<tr class="row-even"><td rowspan="4"><ul class="simple">
+<li><p>prepend</p></li>
+</ul>
+</td>
+<td colspan="3"><p><em>Prepend</em></p></td>
+</tr>
+<tr class="row-odd"><td colspan="3"><p>Value to prepend to list-type parameters</p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
+<td colspan="2"><p>null</p></td>
+</tr>
+<tr class="row-odd"><td><p>anyOf</p></td>
+<td><p>type</p></td>
+<td><p><em>null</em></p></td>
+</tr>
+<tr class="row-even"><td rowspan="4"><ul class="simple">
+<li><p>path-append</p></li>
+</ul>
+</td>
+<td colspan="3"><p><em>Path-Append</em></p></td>
+</tr>
+<tr class="row-odd"><td colspan="3"><p>Path to append to path-type parameters (OS-specific separator)</p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
+<td colspan="2"><p>null</p></td>
+</tr>
+<tr class="row-odd"><td><p>anyOf</p></td>
+<td><p>type</p></td>
+<td><p><em>null</em></p></td>
+</tr>
+<tr class="row-even"><td rowspan="4"><ul class="simple">
+<li><p>path-prepend</p></li>
+</ul>
+</td>
+<td colspan="3"><p><em>Path-Prepend</em></p></td>
+</tr>
+<tr class="row-odd"><td colspan="3"><p>Path to prepend to path-type parameters (OS-specific separator)</p></td>
+</tr>
+<tr class="row-even"><td><p>default</p></td>
+<td colspan="2"><p>null</p></td>
+</tr>
+<tr class="row-odd"><td><p>anyOf</p></td>
+<td><p>type</p></td>
 <td><p><em>null</em></p></td>
 </tr>
 </tbody>
 </table>
+</section>
 </section>
 </section>
 </section>

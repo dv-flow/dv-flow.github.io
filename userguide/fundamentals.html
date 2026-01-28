@@ -35,6 +35,38 @@
             
   <section id="key-concepts">
 <h1>Key Concepts<a class="headerlink" href="#key-concepts" title="Link to this heading">¶</a></h1>
+<section id="file-structure">
+<h2>File Structure<a class="headerlink" href="#file-structure" title="Link to this heading">¶</a></h2>
+<p>Each <cite>flow.dv</cite> file either defines a package or a package fragment.
+Each package is defined by the content in its root <cite>flow.dv</cite> file
+and that in any <cite>fragment</cite> files that are specified in the root
+package file or its fragments.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">package</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">proj1</span>
+
+<span class="w">    </span><span class="c1"># ...</span>
+
+<span class="w">    </span><span class="nt">fragments</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src/rtl/flow.yaml</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src/verif</span>
+</pre></div>
+</div>
+<p>Each package fragment element a file to load. It is expected that the
+content will be a DV-Flow package fragment.  The structure of a package
+fragment file is nearly identical to a package
+definition. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">fragment</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rtl</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">std.FileSet</span>
+<span class="w">      </span><span class="nt">params</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">include</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*.sv&quot;</span>
+</pre></div>
+</div>
+<p>Remember that all fragments referenced by a given package contribute to
+the same package namespace. It would be illegal for another flow file
+to also define a task named <cite>rtl</cite>.</p>
+</section>
 <section id="tasks">
 <h2>Tasks<a class="headerlink" href="#tasks" title="Link to this heading">¶</a></h2>
 <p>Tasks are the fundamental unit of behavior in a DV-Flow specification. Tasks
@@ -122,7 +154,7 @@ global data to configure tools means that it’s impossible to use two
 different configurations as part of the same workflow. Coordinating via
 known paths requires all tasks to share the same filesystem, which
 limits where tasks can run, and limits opportunities for caching.</p>
-<p>Consequently, DV-Flow tasks coordinate via parameter sets produced by
+<p>Consequently, DV-Flow tasks coordinate via datasets produced by
 a task and consumed by tasks that depend on the producing task.</p>
 <div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="nt">package</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">p1</span>

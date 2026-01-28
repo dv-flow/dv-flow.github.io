@@ -2,48 +2,194 @@
 Flow-Spec Reference
 ###################
 
-File Root Elements
-==================
+Conventions
+###########
 
-Each `flow.yaml` file either defines a package or a package fragment.
-Each package is defined by the content in its root `flow.yaml` file 
-and that in any `fragment` files that are specified in the root 
-package file or its fragments.
+The reference documentation uses a few conventions when specifying the
+capabilities of various aspects of the specification:
+
+* **refstring** - A string where parameter and expression references (ie ${{ ... }})
+  are expanded. 
+* **string** - A literal string
+
+Packages
+########
+
+A package file defines content under a `package` root element. The `name` element 
+is required. Other elements are optional. 
+
 
 .. code-block:: yaml
+    :caption: Minimal package definition
 
     package:
-        name: proj1
+      name: my_package
 
-        # ...
+An outline of the package schema is shown below. Please see the following sections
+for more information about key items:
 
-        fragments:
-        - src/rtl/flow.yaml
-        - src/verif
+* Datasets
+* Tasks
 
-Each package fragment element specifies either a directory or a file.
-If a file is specified, then that file is loaded. It is expected that the
-content will be a DV-Flow package fragment. If a directory is specified,
-then a top-down search is performed for `flow.dv` files in the subdirectory
-tree. 
+.. list-table::
+    :header-rows: 2
+    :widths: auto
 
-The structure of a package fragment file is nearly identical to a package
-definition. For example:
+    * - Schema: 
+      - #/defs/PackageDef
+      -
+    * - Item 
+      - Type
+      - Description
+    * - name
+      - string
+      - Name of the package
+    * - desc
+      - string
+      - Short description of the package
+    * - doc
+      - string
+      - Documentation of the package content
+    * - uses
+      - string
+      - Name of the base package
+    * - with
+      - list[refstring | ParamDef]
+      - Package parameters
+    * - imports
+      - list[refstring]
+      - External packages to load
+    * - tasks
+      - list[TaskDef]
+      - Task definitions
+    * - datasets
+      - list[DatasetDef]
+      - Dataset definitions
+    * - fragments
+      - list[refstring]
+      - Package fragment files
+A package file defines content under a `package` root element. The `name` element 
+is required. Other elements are optional. 
+
 
 .. code-block:: yaml
+    :caption: Minimal package definition
+
+    package:
+      name: my_package
+
+Uses
+====
+
+A package inherits from a base package via the `uses` element. All elements from the base
+package become elements of the inheriting package.
+
+.. code-block:: yaml
+    :caption: Package inheritance
+
+    # my_base_pkg.yaml
+    package:
+      name: my_base_pkg
+      tasks:
+      - name: my_t1
+
+    # my_ext_pkg.yaml
+    package:
+      name: my_ext_pkg
+      uses: my_base_pkg
+      imports:
+      - my_base_pkg.yml
+      tasks:
+      - name: my_t2
+
+In the example above, `my_ext_pkg` contains two tasks: `my_t1` and `my_t2`. 
+
+With
+====
+
+A package declares and configures package-local parameters using the `with` section.
+
+.. code-block:: yaml
+    :caption: Package parameter declaration
+
+    package:
+      name: my_package
+      with:
+      - name: p1
+        type: str
+        value: abc
+
+For more information about declaring and using parameters, see the `Parameters` section.
+
+Imports
+=======
+
+Packages are explicitly loaded from a file using the `imports` section. Each entry in this
+section is a path to a package file. The path may be absolute or relative. Relative paths
+are resolved:
+
+* Relative to the directory containing the current file
+* Relative to the directory containing the root package file
+
+Variable references are supported.
+
+.. code-block:: yaml
+    :caption: Package import with an environment-rooted path
+
+    package:
+      name: my_package
+      imports:
+      - ${{ env.ANCHOR_my_uvc }}/flow.yaml
+
+.. code-block:: yaml
+    :caption: Package import with a relative path
+
+    package:
+      name: my_package
+      imports:
+      - import/my_ip/flow.yaml
+
+
+Package Fragments
+#################
+
+Package fragment files specify additional content. Most package elements can be
+declared in a fragment, with the exception of the package `name`, 
+`uses` (base package), and `with` (package parameters).
+
+.. code-block:: yaml
+    :caption: Package fragment
 
     fragment:
-        tasks:
-        - name: rtl
-          type: std.FileSet
-          params:
-            include: "*.sv"
+      imports:
+      - ../my_file.yaml
+      tasks:
+      - name: T1
+        # ...
 
-Remember that all fragments referenced by a given package contribute to 
-the same package namespace. It would be illegal for another flow file
-to also define a task named `rtl`.
 
-.. jsonschema:: _build/flow.dv.schema.json#/defs/PackageDef
+.. list-table::
+    :header-rows: 2
+    :widths: auto
+
+    * - Schema: 
+      - #/defs/FragmentDef
+      -
+    * - Item 
+      - Type
+      - Description
+    * - imports
+      - list[refstring]
+      - External packages to load
+    * - tasks
+      - list[TaskDef]
+      - Task definitions
+    * - datasets
+      - list[DatasetDef]
+      - Dataset definitions
+    * - fragments
+      - list[string]
+      - Package fragment files
 
 Task Definition
 ===============
