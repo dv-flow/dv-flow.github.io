@@ -13,10 +13,34 @@ package:
       src: pypi
     - name: sphinx-external-toc
       src: pypi
-    - name: dv-flow-mgr
-      url: https://github.com/dv-flow/dv-flow-mgr.git
     - name: packaging
       src: pypi
+    - name: dv-flow-mgr
+      url: https://github.com/dv-flow/dv-flow-mgr.git
+    - name: dv-flow-libhdlsim
+      url: https://github.com/dv-flow/dv-flow-libhdlsim.git
+    - name: dv-flow-mcp
+      url: https://github.com/dv-flow/dv-flow-mcp.git
+    - name: dv-flow-release
+      url: https://github.com/dv-flow/dv-flow-release.git
+    - name: dv-flow-libtest
+      url: https://github.com/dv-flow/dv-flow-libtest.git
+    - name: pytest-dfm
+      url: https://github.com/dv-flow/pytest-dfm.git
+    - name: dv-flow-libformal
+      url: https://github.com/dv-flow/dv-flow-libformal.git
+    - name: dv-flow-libsrc
+      url: https://github.com/dv-flow/dv-flow-libsrc.git
+    - name: dv-flow-libcc
+      url: https://github.com/dv-flow/dv-flow-libcc.git
+    - name: dv-flow-libedalize
+      url: https://github.com/dv-flow/dv-flow-libedalize.git
+    - name: dv-flow-libide
+      url: https://github.com/dv-flow/dv-flow-libide.git
+    - name: dv-flow-libpss
+      url: https://github.com/dv-flow/dv-flow-libpss.git
+    - name: vscode-dv-flow
+      url: https://github.com/dv-flow/vscode-dv-flow.git
 
   - name: default
     deps:

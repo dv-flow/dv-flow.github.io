@@ -2,6 +2,43 @@
 Key Concepts
 ############
 
+File Structure
+##############
+
+Each `flow.dv` file either defines a package or a package fragment.
+Each package is defined by the content in its root `flow.dv` file 
+and that in any `fragment` files that are specified in the root 
+package file or its fragments.
+
+.. code-block:: yaml
+
+    package:
+        name: proj1
+
+        # ...
+
+        fragments:
+        - src/rtl/flow.yaml
+        - src/verif
+
+Each package fragment element a file to load. It is expected that the
+content will be a DV-Flow package fragment.  The structure of a package 
+fragment file is nearly identical to a package
+definition. For example:
+
+.. code-block:: yaml
+
+    fragment:
+        tasks:
+        - name: rtl
+          type: std.FileSet
+          params:
+            include: "*.sv"
+
+Remember that all fragments referenced by a given package contribute to 
+the same package namespace. It would be illegal for another flow file
+to also define a task named `rtl`.
+
 Tasks
 #####
 
@@ -109,7 +146,7 @@ different configurations as part of the same workflow. Coordinating via
 known paths requires all tasks to share the same filesystem, which
 limits where tasks can run, and limits opportunities for caching. 
 
-Consequently, DV-Flow tasks coordinate via parameter sets produced by
+Consequently, DV-Flow tasks coordinate via datasets produced by
 a task and consumed by tasks that depend on the producing task.
 
 .. code-block:: YAML
