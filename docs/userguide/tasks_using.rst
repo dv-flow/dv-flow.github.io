@@ -114,19 +114,123 @@ The two controls are:
 
   * **all** - All input data is passed to the implementation
   * **none** - No input data is passed to the implementation
-  * *pattern* - Inputs matching a pattern are passed to the implementation
+  * *list of patterns* - Only inputs matching one of the patterns are passed to the implementation.
+    Each pattern is a dictionary where all key-value pairs must match the data item's attributes.
 * **passthrough** - Specifies what inputs are passed to the task output
 
   * **all** - All input data is passed to the output
   * **none** - No input data is passed to the output
   * **unused** - Inputs that are not consumed are passed to the output
-  * *pattern* - Inputs matching a pattern are passed to the output
+  * *list of patterns* - Only inputs matching one of the patterns are passed to the output.
+    Each pattern is a dictionary where all key-value pairs must match the data item's attributes.
 
-The default value of `passthrough` is always **unused**. The default value for the 
-`consumes`` parameter depends on the task type:
+The default value of `passthrough` is **unused**. The default value for 
+`consumes` is **all**.
 
-* **Shell or Python Implementation**: all
-* **DataItem or No Implementation**: none
+Dataflow Examples
+-----------------
+
+**Example 1: Using passthrough to control output**
+
+When a task doesn't consume any inputs but should still forward them to dependent tasks:
+
+.. code-block:: yaml
+
+    tasks:
+    - name: file1
+      uses: std.CreateFile
+      with:
+        filename: "file1.txt"
+        content: "content1"
+    - name: file2
+      uses: std.CreateFile
+      with:
+        filename: "file2.txt"
+        content: "content2"
+    - name: collector
+      needs: [file1, file2]
+      passthrough: all
+      consumes: none
+
+In this example, the `collector` task doesn't consume any inputs (`consumes: none`)
+but passes all inputs through to tasks that depend on it (`passthrough: all`).
+
+**Example 2: Pattern matching with consumes**
+
+When a task should only consume specific data items based on their attributes:
+
+.. code-block:: yaml
+
+    tasks:
+    - name: rtl_files
+      uses: std.FileSet
+      with:
+        type: "verilogSource"
+        base: "rtl"
+        include: "*.v"
+    - name: tb_files  
+      uses: std.FileSet
+      with:
+        type: "verilogSource"
+        base: "tb"
+        include: "*.sv"
+    - name: sim
+      uses: hdlsim.vlt.SimImage
+      needs: [rtl_files, tb_files]
+      consumes:
+        - type: "std.FileSet"
+
+In this example, the `sim` task only consumes data items of type `std.FileSet`. 
+The `consumes` parameter is a list of patterns, where each pattern is a dictionary.
+A data item matches if all key-value pairs in the pattern match the item's attributes.
+
+**Example 3: Selective passthrough with patterns**
+
+When a task should only pass through specific types of data:
+
+.. code-block:: yaml
+
+    tasks:
+    - name: producer
+      uses: hdlsim.vlt.SimImage
+      # Produces FileSet items with different filetypes
+    - name: filter
+      needs: [producer]
+      passthrough:
+        - type: "std.FileSet"
+          filetype: "verilogInclude"
+        - type: "std.FileSet"
+          filetype: "simLib"
+      consumes: none
+
+In this example, the `filter` task doesn't consume any inputs but only passes through
+`FileSet` items that have `filetype` of either `verilogInclude` or `simLib`. Other 
+inputs from `producer` are not passed to tasks depending on `filter`.
+
+**Example 4: Combining passthrough and consumes**
+
+The `unused` passthrough mode automatically passes through inputs that were not consumed:
+
+.. code-block:: yaml
+
+    tasks:
+    - name: files
+      uses: std.FileSet
+      with:
+        base: "src"
+        include: "*.txt"
+    - name: options
+      uses: hdlsim.SimElabArgs
+      with:
+        args: ["--trace"]
+    - name: sim
+      needs: [files, options]
+      consumes:
+        - type: "hdlsim.SimElabArgs"
+      # passthrough defaults to 'unused'
+      
+In this example, `sim` consumes only the `SimElabArgs` items. The default `passthrough: unused`
+means the unconsumed `FileSet` items are automatically passed through to tasks that depend on `sim`.
 
 
 
