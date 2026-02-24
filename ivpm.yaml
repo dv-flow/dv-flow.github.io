@@ -19,8 +19,6 @@ package:
       url: https://github.com/dv-flow/dv-flow-mgr.git
     - name: dv-flow-libhdlsim
       url: https://github.com/dv-flow/dv-flow-libhdlsim.git
-    - name: dv-flow-mcp
-      url: https://github.com/dv-flow/dv-flow-mcp.git
     - name: dv-flow-release
       url: https://github.com/dv-flow/dv-flow-release.git
     - name: dv-flow-libtest
